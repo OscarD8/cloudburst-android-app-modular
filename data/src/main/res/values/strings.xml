@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">data</string>
+    <string name="fact1">Space smells like seared steak after spacewalks due to atomic oxygen reactions.</string>
+    <string name="fact2">One day on Venus is longer than a year on Venus.</string>
+    <string name="fact3">There’s a giant water cloud in space with 140 trillion times the water in Earth’s oceans.</string>
+    <string name="fact4">Neutron stars can rotate hundreds of times per second.</string>
+    <string name="fact5">Space isn’t silent—plasma and electromagnetic waves create eerie sounds.</string>
+    <string name="fact6">Olympus Mons on Mars is the tallest volcano in the solar system, three times Everest.</string>
+    <string name="fact7">Saturn could float in water because it’s less dense than water.</string>
+    <string name="fact8">Black holes don’t suck; they just have extremely strong gravity.</string>
+    <string name="fact9">Some rogue planets drift through space without orbiting a star.</string>
+    <string name="fact10">Astronauts grow taller in space, up to 2 inches, due to spinal decompression.</string>
+    <string name="fact11">Time passes differently in orbit; astronauts age slightly slower than on Earth.</string>
+    <string name="fact12">Some exoplanets may be covered in diamonds due to carbon-rich conditions.</string>
+    <string name="fact13">The Boomerang Nebula is the coldest place found, just 1 Kelvin above absolute zero.</string>
+    <string name="fact14">A spoonful of neutron star material weighs about a billion tons.</string>
+    <string name="fact15">There are more galaxies in the universe than grains of sand on all Earth’s beaches.</string>
+</resources>
