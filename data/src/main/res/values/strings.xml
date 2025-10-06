@@ -1,18 +1,257 @@
 <resources>
-    <string name="app_name">data</string>
-    <string name="fact1">Space smells like seared steak after spacewalks due to atomic oxygen reactions.</string>
-    <string name="fact2">One day on Venus is longer than a year on Venus.</string>
-    <string name="fact3">There’s a giant water cloud in space with 140 trillion times the water in Earth’s oceans.</string>
-    <string name="fact4">Neutron stars can rotate hundreds of times per second.</string>
-    <string name="fact5">Space isn’t silent—plasma and electromagnetic waves create eerie sounds.</string>
-    <string name="fact6">Olympus Mons on Mars is the tallest volcano in the solar system, three times Everest.</string>
-    <string name="fact7">Saturn could float in water because it’s less dense than water.</string>
-    <string name="fact8">Black holes don’t suck; they just have extremely strong gravity.</string>
-    <string name="fact9">Some rogue planets drift through space without orbiting a star.</string>
-    <string name="fact10">Astronauts grow taller in space, up to 2 inches, due to spinal decompression.</string>
-    <string name="fact11">Time passes differently in orbit; astronauts age slightly slower than on Earth.</string>
-    <string name="fact12">Some exoplanets may be covered in diamonds due to carbon-rich conditions.</string>
-    <string name="fact13">The Boomerang Nebula is the coldest place found, just 1 Kelvin above absolute zero.</string>
-    <string name="fact14">A spoonful of neutron star material weighs about a billion tons.</string>
-    <string name="fact15">There are more galaxies in the universe than grains of sand on all Earth’s beaches.</string>
+
+    <!-- Restaurant Names -->
+    <string name="restaurant_name_mycelia_feast">Mycelia Feast – Hall of First Harvests</string>
+    <string name="restaurant_name_neon_nectar">Neon Nectar (Established 2135)</string>
+    <string name="restaurant_name_solaris_table">Solaris Table – Floating Pavilion</string>
+    <string name="restaurant_name_fungal_bloom">Fungal Bloom and Sky Gardens</string>
+    <string name="restaurant_name_shimmering_spoon">The Shimmering Spoon – Central Canal</string>
+    <string name="restaurant_name_aurora_harvest">Aurora Harvest, Upper Terrace Dining</string>
+
+    <!-- Restaurant Addresses -->
+    <string name="restaurant_address_mycelia_feast">Canal 1, Cloudburst Central</string>
+    <string name="restaurant_address_neon_nectar">Neon Wharf, Cloudburst East</string>
+    <string name="restaurant_address_solaris_table">Solar Plaza, Level 3</string>
+    <string name="restaurant_address_fungal_bloom">Mushroom Walk, Green Sector</string>
+    <string name="restaurant_address_shimmering_spoon">Shimmer Lane, Cloudburst Heights</string>
+    <string name="restaurant_address_aurora_harvest">Aurora Avenue, Central Canal District</string>
+
+    <!-- Restaurant Descriptions -->
+    <string name="restaurant_description_mycelia_feast">
+        Step into Mycelia Feast, the Hall of First Harvests, where the walls glow with living mycelium and the air hums with faint neon energy. Recommended for its seasonal spore-based delicacies and panoramic canal views, it’s the perfect blend of innovation and serenity in Cloudburst.
+    </string>
+
+    <string name="restaurant_description_neon_nectar">
+        Neon Nectar dazzles with vibrant dishes served beneath cascading neon lights that shimmer over the canals. Visitors praise its fusion of bioluminescent flavors and immersive ambiance, making every meal a sensory experience.
+    </string>
+
+    <string name="restaurant_description_solaris_table">
+        Solaris Table offers elevated dining on floating platforms above the central canal. Its solar-infused recipes highlight locally grown ingredients, making it a must-visit for eco-conscious food enthusiasts seeking a taste of Cloudburst’s innovation.
+    </string>
+
+    <string name="restaurant_description_fungal_bloom">
+        Fungal Bloom and Sky Gardens combines a lush mycelium-covered terrace with open-air seating. Guests love the tranquil atmosphere and creative dishes crafted from the city’s signature spore-based ingredients, perfect for a relaxed afternoon.
+    </string>
+
+    <string name="restaurant_description_shimmering_spoon">
+        The Shimmering Spoon invites diners to experience culinary artistry along the central canal. With its sparkling water reflections and elegant spore-inspired menu, it’s ideal for a romantic evening or special celebration.
+    </string>
+
+    <string name="restaurant_description_aurora_harvest">
+        Aurora Harvest offers a panoramic view from the upper terrace, showcasing Cloudburst’s flowing canals and glowing cloud formations. Recommended for its fresh seasonal fare and immersive solar-punk ambiance, it’s a feast for both eyes and taste buds.
+    </string>
+
+
+    <!-- Cafe Names -->
+    <string name="cafe_name_lumina_brew">Lumina Brew – Pod 12</string>
+    <string name="cafe_name_spore_and_steam">Spore and Steam, East Canal</string>
+    <string name="cafe_name_neon_drip">Neon Drip (Founded 2142)</string>
+    <string name="cafe_name_solar_sip">Solar Sip – The Morning Terrace</string>
+    <string name="cafe_name_fungal_cup">The Fungal Cup of Whispering Leaves</string>
+    <string name="cafe_name_aurora_bean">Aurora Bean the Floating Walkway</string>
+
+    <!-- Cafe Addresses -->
+    <string name="cafe_address_lumina_brew">Canal Edge, Cloudburst Central</string>
+    <string name="cafe_address_spore_and_steam">Mycelium Walk, Green Sector</string>
+    <string name="cafe_address_neon_drip">Neon Pier, East Cloudburst</string>
+    <string name="cafe_address_solar_sip">Solar Promenade, Level 2</string>
+    <string name="cafe_address_fungal_cup">Spore Lane, Cloudburst Heights</string>
+    <string name="cafe_address_aurora_bean">Aurora Arcade, Central Canal District</string>
+
+    <!-- Cafe Descriptions -->
+    <string name="cafe_description_lumina_brew">
+        Lumina Brew – Pod 12 offers a cozy retreat along the central canal, with glowing mycelium pods and aromatic brews. Recommended for its unique spore-infused drinks and relaxed floating ambiance.
+    </string>
+
+    <string name="cafe_description_spore_and_steam">
+        Spore and Steam, East Canal, combines artisanal coffee with the subtle hum of neon water reflections. Visitors love its serene atmosphere and the delicate flavors inspired by Cloudburst’s floating gardens.
+    </string>
+
+    <string name="cafe_description_neon_drip">
+        Neon Drip (Founded 2142) dazzles with vibrant colors and bioluminescent decor. Recommended for anyone seeking visually stunning drinks paired with creative pastries along the canal walkways.
+    </string>
+
+    <string name="cafe_description_solar_sip">
+        Solar Sip – The Morning Terrace sits above the gently flowing canals, bathing patrons in soft solar-inspired light. Its specialty sun-roasted blends and panoramic views make it ideal for a morning ritual.
+    </string>
+
+    <string name="cafe_description_fungal_cup">
+        The Fungal Cup of Whispering Leaves offers a quiet nook amidst lush mycelium-covered walls. Visitors praise its innovative herbal infusions and the calming, immersive experience it provides.
+    </string>
+
+    <string name="cafe_description_aurora_bean">
+        Aurora Bean the Floating Walkway features elegant neon-lit seating suspended over the water. Recommended for its experimental beverages and a peaceful view of Cloudburst’s shimmering canal network.
+    </string>
+
+
+    <!-- Park Names -->
+    <string name="park_name_luminescent_grove">Luminescent Grove of the First Spore</string>
+    <string name="park_name_mycelium_gardens">Mycelium Gardens (Founded 2147)</string>
+    <string name="park_name_neon_canopy">Neon Canopy Walk</string>
+    <string name="park_name_solar_arcadia">Solar Arcadia - The Floating Terraces</string>
+    <string name="park_name_fungal_glade">Fungal Glade of Whispering Streams</string>
+    <string name="park_name_aurora_terrace">Aurora Terrace and Reflection Pools</string>
+
+    <!-- Park Addresses -->
+    <string name="park_address_luminescent_grove">Central Canal Park, Level 1</string>
+    <string name="park_address_mycelium_gardens">Green Sector Promenade</string>
+    <string name="park_address_neon_canopy">Neon Bridge Walk, East Cloudburst</string>
+    <string name="park_address_solar_arcadia">Terrace Ring, Solar Plaza Gardens</string>
+    <string name="park_address_fungal_glade">Fungal Walk, Cloudburst Heights</string>
+    <string name="park_address_aurora_terrace">Aurora Canal Terrace, Upper Levels</string>
+
+    <!-- Park Descriptions -->
+    <string name="park_description_luminescent_grove">
+        Luminescent Grove of the First Spore is a magical park where glowing mycelium arches create natural tunnels. Recommended for evening strolls and observing Cloudburst’s shimmering microclimate.
+    </string>
+
+    <string name="park_description_mycelium_gardens">
+        Mycelium Gardens (Founded 2147) showcases carefully cultivated spore flora and floating terraces. Visitors love the harmony of technology and nature, perfect for quiet reflection.
+    </string>
+
+    <string name="park_description_neon_canopy">
+        Neon Canopy Walk features towering mycelium trees lit with soft neon highlights. Recommended for scenic walks and photography of Cloudburst’s unique waterway network.
+    </string>
+
+    <string name="park_description_solar_arcadia">
+        Solar Arcadia – The Floating Terraces offers interconnected sky platforms over canals, where plants and fungi bloom. Visitors praise the combination of panoramic views and eco-friendly design.
+    </string>
+
+    <string name="park_description_fungal_glade">
+        Fungal Glade of Whispering Streams is a serene retreat where tiny water channels weave through glowing spores. Perfect for meditation, picnics, or a quiet afternoon immersed in nature.
+    </string>
+
+    <string name="park_description_aurora_terrace">
+        Aurora Terrace and Reflection Pools captures shimmering cloud reflections in carefully arranged pools. Recommended for sunset strolls and witnessing Cloudburst’s artificial microclimate at its best.
+    </string>
+
+
+    <!-- Temple Names -->
+    <string name="temple_name_sunspire_sanctuary">Sunspire Sanctuary</string>
+    <string name="temple_name_helios_haven">Helios Haven of the Dawn Council</string>
+    <string name="temple_name_radiant_dome">Radiant Dome (Constructed 2132)</string>
+    <string name="temple_name_solstice_shrine">Solstice Shrine of Eternal Light</string>
+    <string name="temple_name_aurora_altar">Aurora Altar - Temple of Falling Clouds</string>
+    <string name="temple_name_celestial_sun">Celestial Sun Bath, Upper Zenith</string>
+
+    <!-- Temple Addresses -->
+    <string name="temple_address_sunspire_sanctuary">Solar Plaza, Central Cloudburst</string>
+    <string name="temple_address_helios_haven">Helios Walk, Green Sector</string>
+    <string name="temple_address_radiant_dome">Radiant Terrace, Level 2</string>
+    <string name="temple_address_solstice_shrine">Solstice Lane, East Cloudburst</string>
+    <string name="temple_address_aurora_altar">Aurora Avenue, Central Canal District</string>
+    <string name="temple_address_celestial_sun">Celestial Spire, Cloudburst Heights</string>
+
+    <!-- Temple Descriptions -->
+    <string name="temple_description_sunspire_sanctuary">
+        Sunspire Sanctuary honors the city’s sun deity with towering mycelium spires. Recommended for its breathtaking architecture and tranquil meditation spaces.
+    </string>
+
+    <string name="temple_description_helios_haven">
+        Helios Haven of the Dawn Council offers ritual spaces bathed in solar-infused light. Visitors praise the combination of ceremonial grandeur and serene reflection areas.
+    </string>
+
+    <string name="temple_description_radiant_dome">
+        Radiant Dome (Constructed 2132) features a bioluminescent ceiling that mimics sunrise. Recommended for architectural beauty and spiritual immersion in Cloudburst’s unique culture.
+    </string>
+
+    <string name="temple_description_solstice_shrine">
+        Solstice Shrine of Eternal Light sits atop a floating terrace, connecting nature and ritual. Visitors love its harmonious design and panoramic city views during ceremonies.
+    </string>
+
+    <string name="temple_description_aurora_altar">
+        Aurora Altar – Temple of Falling Clouds incorporates cascading water and glowing spores. Recommended for spiritual seekers and photographers capturing Cloudburst’s ethereal ambiance.
+    </string>
+
+    <string name="temple_description_celestial_sun">
+        Celestial Sun Temple, Upper Zenith, crowns the tallest canal tower with solar-harvesting panels. Visitors appreciate its blend of technology, spirituality, and breathtaking vistas.
+    </string>
+
+    <!-- Mycelium Printer Names -->
+    <string name="printer_name_spore_forge">Spore Forge Alpha</string>
+    <string name="printer_name_mycelium_works">Mycelium Works - Node 7</string>
+    <string name="printer_name_biofab_hub">BioFab Hub (Experimental)</string>
+    <string name="printer_name_fungal_foundry">Fungal Foundry of the Old Colony</string>
+    <string name="printer_name_aurora_fabricators">Aurora Fabricators – Sky Loop</string>
+    <string name="printer_name_neon_grow">Neon Grow Labs, Level 5</string>
+
+    <!-- Mycelium Printer Addresses -->
+    <string name="printer_address_spore_forge">Canal Edge, Green Sector</string>
+    <string name="printer_address_mycelium_works">Central Lab Walk, Cloudburst Central</string>
+    <string name="printer_address_biofab_hub">Bio Plaza, Level 3</string>
+    <string name="printer_address_fungal_foundry">Foundry Lane, East Cloudburst</string>
+    <string name="printer_address_aurora_fabricators">Aurora Arcade, Central Canal District</string>
+    <string name="printer_address_neon_grow">Neon Wharf, Cloudburst Heights</string>
+
+    <!-- Mycelium Printer Descriptions -->
+    <string name="printer_description_spore_forge">
+        Spore Forge Alpha allows residents to craft mycelium-based furnishings and tools. Recommended for innovative DIY projects and exploring Cloudburst’s sustainable materials.
+    </string>
+
+    <string name="printer_description_mycelium_works">
+        Mycelium Works - Node 7 is a bustling hub for community fabrication. Visitors enjoy experimenting with eco-friendly designs and seeing their creations come to life.
+    </string>
+
+    <string name="printer_description_biofab_hub">
+        BioFab Hub (Experimental) specializes in experimental mycelium materials and cutting-edge fabrication. Recommended for curious creators seeking unique projects.
+    </string>
+
+    <string name="printer_description_fungal_foundry">
+        Fungal Foundry of the Old Colony blends traditional craft with modern tech. Visitors love the historical ambiance and hands-on fabrication experiences.
+    </string>
+
+    <string name="printer_description_aurora_fabricators">
+        Aurora Fabricators – Sky Loop features floating platforms for creating lightweight mycelium structures. Recommended for those looking for a visually stunning and functional crafting space.
+    </string>
+
+    <string name="printer_description_neon_grow">
+        Neon Grow Labs, Level 5, is a high-tech fabrication hub with glowing mycelium walls. Visitors praise its futuristic aesthetic and the ability to quickly prototype sustainable designs.
+    </string>
+
+    <!-- Image Identifiers -->
+    <!-- Restaurants -->
+    <string name="restaurant_mycelia_feast">restaurant_mycelia_feast</string>
+    <string name="restaurant_neon_nectar">restaurant_neon_nectar</string>
+    <string name="restaurant_solaris_table">restaurant_solaris_table</string>
+    <string name="restaurant_fungal_bloom">restaurant_fungal_bloom</string>
+    <string name="restaurant_shimmering_spoon">restaurant_shimmering_spoon</string>
+    <string name="restaurant_aurora_harvest">restaurant_aurora_harvest</string>
+
+    <!-- Cafes -->
+    <string name="cafe_lumina_brew">cafe_lumina_brew</string>
+    <string name="cafe_spore_and_steam">cafe_spore_and_steam</string>
+    <string name="cafe_neon_drip">cafe_neon_drip</string>
+    <string name="cafe_solar_sip">cafe_solar_sip</string>
+    <string name="cafe_fungal_cup">cafe_fungal_cup</string>
+    <string name="cafe_aurora_bean">cafe_aurora_bean</string>
+
+    <!-- Parks -->
+    <string name="park_luminescent_grove">park_luminescent_grove</string>
+    <string name="park_mycelium_gardens">park_mycelium_gardens</string>
+    <string name="park_neon_canopy">park_neon_canopy</string>
+    <string name="park_solar_arcadia">park_solar_arcadia</string>
+    <string name="park_fungal_glade">park_fungal_glade</string>
+    <string name="park_aurora_terrace">park_aurora_terrace</string>
+
+    <!-- Temples -->
+    <string name="temple_sunspire_sanctuary">temple_sunspire_sanctuary</string>
+    <string name="temple_helios_haven">temple_helios_haven</string>
+    <string name="temple_radiant_dome">temple_radiant_dome</string>
+    <string name="temple_solstice_shrine">temple_solstice_shrine</string>
+    <string name="temple_aurora_altar">temple_aurora_altar</string>
+    <string name="temple_celestial_sun">temple_celestial_sun</string>
+
+    <!-- Mycelium Printers -->
+    <string name="printer_spore_forge">printer_spore_forge</string>
+    <string name="printer_mycelium_works">printer_mycelium_works</string>
+    <string name="printer_biofab_hub">printer_biofab_hub</string>
+    <string name="printer_fungal_foundry">printer_fungal_foundry</string>
+    <string name="printer_aurora_fabricators">printer_aurora_fabricators</string>
+    <string name="printer_neon_grow">printer_neon_grow</string>
+
+    <!-- Default Location -->
+    <string name="unknown_location_name">Unknown Location</string>
+    <string name="unknown_location_address">Address not available</string>
+    <string name="unknown_location_description">No description available.</string>
+
 </resources>
