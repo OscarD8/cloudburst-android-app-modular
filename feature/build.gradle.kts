@@ -1,23 +1,23 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.tasks.testing.Test
 
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.google.dagger.hilt)
     alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.google.dagger.hilt)
 }
 
+val mockitoAgent = configurations.create("mockitoAgent")
+
 android {
-    namespace = "com.example.dailyfact"
+    namespace = "com.example.feature"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.dailyfact"
         minSdk = 26
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,35 +36,62 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
 
-    buildFeatures {
-        compose = true
-    }
+
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_21
         }
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
+
 }
 
 dependencies {
+    mockitoAgent(libs.mockito.core) { isTransitive = false }
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.material)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    implementation(libs.jakarta.inject.api)
-    implementation(project(":feature"))
     implementation(project(":domain"))
-    implementation(project(":data"))
+
+
+
+    // JUnit 5 for unit tests
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
+
+    // Mockito for mocking
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.junit.jupiter)
+
+    // Coroutines support for testing
+    testImplementation(libs.kotlinx.coroutines.test)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+}
+
+tasks.withType<Test>().configureEach {
+   doFirst {
+       jvmArgs("-javaagent:${mockitoAgent.asPath}")
+   }
 }

@@ -1,4 +1,4 @@
-package com.example.dailyfact.di
+package com.example.cloudburst.di
 
 import com.example.data.FactRepositoryImpl
 import com.example.domain.FactRepository
