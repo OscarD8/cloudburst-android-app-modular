@@ -12,7 +12,7 @@ plugins {
 val mockitoAgent = configurations.create("mockitoAgent")
 
 android {
-    namespace = "com.example.feature"
+    namespace = "com.example.ui"
     compileSdk = 36
 
     defaultConfig {

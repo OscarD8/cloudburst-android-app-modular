@@ -59,7 +59,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.jakarta.inject.api)
-    implementation(project(":feature"))
+    implementation(project(":ui"))
     implementation(project(":domain"))
     implementation(project(":data"))
     androidTestImplementation(libs.androidx.junit)

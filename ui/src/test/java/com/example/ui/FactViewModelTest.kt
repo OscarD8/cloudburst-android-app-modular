@@ -1,4 +1,4 @@
-package com.example.feature
+package com.example.ui
 
 import com.example.domain.GetRandomFactUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi

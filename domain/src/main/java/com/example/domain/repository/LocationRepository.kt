@@ -1,7 +1,11 @@
 package com.example.domain.repository
 
 import com.example.domain.model.Location
+import com.example.domain.model.LocationCategory
 
 interface LocationRepository {
-    fun getAllLocations() : List<Location>
+
+    suspend fun getLocationsAll() : List<Location>
+    suspend fun getLocationsByCategory(category: LocationCategory): List<Location>
+
 }

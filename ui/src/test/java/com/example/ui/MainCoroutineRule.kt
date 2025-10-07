@@ -1,4 +1,4 @@
-package com.example.feature
+package com.example.ui
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
