@@ -58,10 +58,10 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    implementation(libs.jakarta.inject.api)
     implementation(project(":ui"))
     implementation(project(":domain"))
     implementation(project(":data"))
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

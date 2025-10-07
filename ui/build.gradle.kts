@@ -5,8 +5,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.google.dagger.hilt)
+    alias(libs.plugins.google.devtools.ksp)
 }
 
 val mockitoAgent = configurations.create("mockitoAgent")
@@ -67,13 +67,14 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.material)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
     implementation(project(":domain"))
 
-
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     // JUnit 5 for unit tests
+    testImplementation(platform(libs.junit.jupiter.bom))
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
@@ -91,7 +92,7 @@ dependencies {
 }
 
 tasks.withType<Test>().configureEach {
-   doFirst {
-       jvmArgs("-javaagent:${mockitoAgent.asPath}")
-   }
+    doFirst {
+        jvmArgs("-javaagent:${mockitoAgent.asPath}")
+    }
 }
