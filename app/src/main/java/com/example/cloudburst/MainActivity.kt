@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.ui.FactScreen
-import com.example.ui.theme.DailyFactTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 const val TAG = "lifecycleCheck"

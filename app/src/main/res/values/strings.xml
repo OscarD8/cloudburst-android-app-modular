@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Cloudburst</string>
+
+    <string name="screen_title_home">Home</string>
+    <string name="screen_title_categories">Categories</string>
+    <string name="screen_title_favourites">Favourites</string>
+    <string name="screen_title_locations_list">Locations</string>
+    <string name="screen_title_location_detail">Details</string>
+
 </resources>

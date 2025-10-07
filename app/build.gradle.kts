@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.dailyfact"
+    namespace = "com.example.cloudburst"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.dailyfact"
+        applicationId = "com.example.cloudburst"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material3.window.size.class1)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(project(":ui"))
