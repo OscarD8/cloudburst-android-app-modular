@@ -12,7 +12,19 @@ class LocationRepositoryImpl @Inject constructor(
 ) : LocationRepository {
 
     override suspend fun getLocationsAll(): List<Location> {
-        return FakeApiService.allLocations.map { locationDataEntry ->
+        return mapLocationsListToDomainModels(FakeApiService.allLocations)
+    }
+
+    override suspend fun getLocationsByCategory(category: LocationCategory): List<Location> {
+        val locations = FakeApiService.getLocationsByCategory(category)
+        return mapLocationsListToDomainModels(locations)
+    }
+
+
+    private fun mapLocationsListToDomainModels(
+        locationsList : List<FakeApiService.LocationDataEntry>
+    ) : List<Location> {
+        return locationsList.map { locationDataEntry ->
             Location(
                 id = locationDataEntry.id,
                 name = res.getString(locationDataEntry.nameRes),
@@ -26,13 +38,5 @@ class LocationRepositoryImpl @Inject constructor(
             )
         }
     }
-
-//    override suspend fun getLocationsByCategory(category: LocationCategory): List<Location> {
-//        val locations = FakeApiService.getLocationsByCategory(category)
-//
-//    }
-
-
-    // TODO helper function for mapping
 
 }

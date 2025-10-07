@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="drawer_width">240dp</dimen>
+
+    <!-- TopAppBar Dimens -->
+    <dimen name="sunrise_shape_width">150dp</dimen>
+    <dimen name="sunrise_shape_height">118dp</dimen>
+    <dimen name="inner_circle_size">90dp</dimen>
+    <dimen name="sunrise_padding_right">40dp</dimen>
+    <dimen name="sunrise_padding_top">12dp</dimen>
+    <dimen name="inner_circle_padding_end">15dp</dimen>
+    <dimen name="inner_circle_padding_top">10dp</dimen>
+
+    <!-- Button Dimens -->
+    <dimen name="button_standard_elevation">4.dp</dimen>
+
+    <!-- Navigation Component Dimens -->
+    <dimen name="navbar_item_horizontal_padding">4dp</dimen>
+    <dimen name="navdrawer_item_horizontal_padding">12.dp</dimen>
+    <dimen name="navdrawer_spacer_height">100.dp</dimen>
+
+    <!-- Shadow Offsets -->
+    <dimen name="shadow_offset_y">2.dp</dimen>
+    <dimen name="shadow_offset_negative_y">-2.dp</dimen>
+    <dimen name="shadow_blur_radius">8.dp</dimen>
+    <dimen name="shadow_shape_radius">30.dp</dimen>
+
+    <!-- Component Shape Variants -->
+    <dimen name="home_surface_textbox_shape">100.dp</dimen>
+
+    <!-- Component Internal Padding -->
+    <dimen name="home_column_textbox_padding">32.dp</dimen>
+    <dimen name="home_surface_textbox_padding">12.dp</dimen>
+    <dimen name="home_text_textbox_padding">16.dp</dimen>
+</resources>

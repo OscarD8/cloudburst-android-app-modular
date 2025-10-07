@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">ui</string>
-    <string name="test_string">Test String</string>
+
+    <!-- Button Components -->
+    <string name="explore_button">Explore</string>
+
+    <!-- Navigation Headers -->
+    <string name="home">Home</string>
+    <string name="restaurant_header">Restaurants</string>
+    <string name="cafe_header">Cafés</string>
+    <string name="park_header">Parks</string>
+    <string name="mycelium_printer_header">Printers</string>
+    <string name="temple_header">Temples</string>
+
 </resources>
