@@ -20,6 +20,12 @@ class LocationRepositoryImpl @Inject constructor(
         return mapLocationsListToDomainModels(locations)
     }
 
+    override suspend fun getLocationById(id: Long): Location {
+        val locationDataEntry = FakeApiService.getLocationById(id)
+            ?: FakeApiService.defaultLocation
+        return mapLocationToDomainModel(locationDataEntry)
+    }
+
 
     private fun mapLocationsListToDomainModels(
         locationsList : List<FakeApiService.LocationDataEntry>
@@ -37,6 +43,22 @@ class LocationRepositoryImpl @Inject constructor(
                 isFavourite = locationDataEntry.isFavourite
             )
         }
+    }
+
+    private fun mapLocationToDomainModel(
+        locationDataEntry : FakeApiService.LocationDataEntry
+    ) : Location {
+        return Location(
+            id = locationDataEntry.id,
+            name = res.getString(locationDataEntry.nameRes),
+            address = res.getString(locationDataEntry.addressRes),
+            description = res.getString(locationDataEntry.descriptionRes),
+            imageIdentifier = locationDataEntry.imageIdentifier,
+            rating = locationDataEntry.rating,
+            isCarbonCapturing = locationDataEntry.isCarbonCapturing,
+            category = locationDataEntry.category,
+            isFavourite = locationDataEntry.isFavourite
+        )
     }
 
 }

@@ -18,6 +18,9 @@ mockito = "5.20.0"
 mockito-kotlin = "6.1.0"
 material3WindowSizeClass = "1.4.0"
 constraintlayoutCompose = "1.1.1"
+junit = "4.13.2"
+appcompat = "1.7.1"
+navigationCompose = "2.9.5"
 
 
 [libraries]
@@ -25,7 +28,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-compose-material3-window-size-class1 = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api"}
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine"}
 junit-jupiter-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitJupiter" }
@@ -49,6 +52,8 @@ jakarta-inject-api = { group = "jakarta.inject", name = "jakarta.inject-api", ve
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -57,4 +62,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
 google-devtools-ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

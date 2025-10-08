@@ -63,6 +63,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":core:navigation"))
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

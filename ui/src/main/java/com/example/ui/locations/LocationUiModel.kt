@@ -3,7 +3,7 @@ package com.example.ui.locations
 import androidx.annotation.DrawableRes
 import com.example.domain.model.LocationCategory
 
-data class LocationUiState (
+data class LocationUiModel (
     val id: Long,
     val name: String,
     val address: String,

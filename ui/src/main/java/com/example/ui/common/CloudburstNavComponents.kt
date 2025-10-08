@@ -21,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.core.navigation.NavigationItem
+import com.example.core.navigation.navigationItems
 import com.example.ui.R
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.TopRoundedShape30
@@ -30,21 +32,21 @@ import com.example.domain.model.LocationCategory
 /**
  * Renders the content within a permanent navigation drawer, typically used for large screens.
  *
- * This composable iterates through a list of [NavigationItem]s and displays them as selectable
+ * This composable iterates through a list of [com.example.core.navigation.NavigationItem]s and displays them as selectable
  * [NavigationDrawerItem]s. It highlights the currently selected item and handles tab press events.
  *
  * @param currentCategory The currently active [LocationCategory], used to highlight the selected item.
  * @param onTabPressed A lambda function that is invoked when a navigation item is clicked,
  * passing the selected [LocationCategory].
  * @param modifier A [Modifier] to be applied to the content container.
- * @param navItems A list of [NavigationItem] objects that define the content and routing
+ * @param navItems A list of [com.example.core.navigation.NavigationItem] objects that define the content and routing
  * for each drawer item.
  */
 @Composable
 fun CloudburstNavigationDrawerContent(
     modifier: Modifier = Modifier,
     navItems: List<NavigationItem> = navigationItems,
-    currentCategory: LocationCategory,
+    currentTab: NavigationItem,
     onTabPressed: (LocationCategory) -> Unit
 ) {
     navItems.forEach { navItem ->

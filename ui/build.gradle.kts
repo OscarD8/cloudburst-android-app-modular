@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.material)
     implementation(project(":domain"))
+    implementation(project(":core:navigation"))
 
     // Hilt
     implementation(libs.hilt.android)

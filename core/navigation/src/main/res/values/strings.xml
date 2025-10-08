@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="restaurant_header">Restaurants</string>
+    <string name="cafe_header">Cafes</string>
+    <string name="park_header">Parks</string>
+    <string name="temple_header">Temples</string>
+    <string name="mycelium_printer_header">Mycelium Printers</string>
+    <string name="categories_header">Categories</string>
+    <string name="favourites_header">Favourites</string>
+    <string name="home_header">Home</string>
+</resources>

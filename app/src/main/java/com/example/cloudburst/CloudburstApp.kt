@@ -14,7 +14,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.cloudburst.navigation.Screen
+import com.example.core.navigation.Screen
 import com.example.ui.common.CloudburstBackground
 import com.example.ui.common.CloudburstNavBar
 import com.example.ui.common.CloudburstTopAppBar
@@ -61,7 +61,7 @@ fun CloudburstApp(
         bottomBar = {
             AnimatedVisibility(visible = navigationType == CloudburstNavigationType.BOTTOM_NAVBAR) {
                 CloudburstNavBar(
-                    currentCategory = // TODO,
+                    currentCategory = ,
                     onTabPressed = {  },
                     modifier = Modifier.fillMaxWidth()
                 )

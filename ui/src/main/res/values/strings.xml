@@ -12,4 +12,5 @@
     <string name="mycelium_printer_header">Printers</string>
     <string name="temple_header">Temples</string>
 
+    <string name="error_location">Location not found.</string>
 </resources>

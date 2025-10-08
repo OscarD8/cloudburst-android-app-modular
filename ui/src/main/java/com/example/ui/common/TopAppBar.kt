@@ -36,13 +36,13 @@ import com.example.ui.theme.shadowCustom
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CloudburstTopAppBar(
-    currentScreen: String,
+    screenTitle: String,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
         title = {
             Text(
-                text = stringResource(currentScreen.title),
+                text = screenTitle,
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onTertiaryContainer
             )

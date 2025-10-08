@@ -8,4 +8,6 @@ interface LocationRepository {
     suspend fun getLocationsAll() : List<Location>
     suspend fun getLocationsByCategory(category: LocationCategory): List<Location>
 
+    suspend fun getLocationById(id: Long): Location
+
 }
