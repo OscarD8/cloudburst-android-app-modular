@@ -2,6 +2,12 @@
 <resources>
     <dimen name="drawer_width">240dp</dimen>
 
+    <!-- Generic Dimens -->
+    <dimen name="padding_small">4.dp</dimen>
+    <dimen name="padding_medium">8.dp</dimen>
+    <dimen name="padding_large">16.dp</dimen>
+    <dimen name="padding_xlarge">32.dp</dimen>
+
     <!-- TopAppBar Dimens -->
     <dimen name="sunrise_shape_width">150dp</dimen>
     <dimen name="sunrise_shape_height">70dp</dimen>
@@ -13,6 +19,8 @@
 
     <!-- Button Dimens -->
     <dimen name="button_standard_elevation">4.dp</dimen>
+    <dimen name="button_text_start_padding">4.dp</dimen>
+    <dimen name="button_text_bottom_padding">4.dp</dimen>
 
     <!-- Navigation Component Dimens -->
     <dimen name="navbar_item_horizontal_padding">4dp</dimen>
@@ -32,4 +40,11 @@
     <dimen name="home_column_textbox_padding">32.dp</dimen>
     <dimen name="home_surface_textbox_padding">12.dp</dimen>
     <dimen name="home_text_textbox_padding">16.dp</dimen>
+
+    <!-- List Items -->
+    <dimen name="list_item_internal_text_width">166.dp</dimen>
+    <dimen name="list_item_internal_text_height">72.dp</dimen>
+    <dimen name="list_item_width">363.dp</dimen>
+    <dimen name="list_item_height">153.dp</dimen>
+    <dimen name="list_item_next_arrow_box">72.dp</dimen>
 </resources>

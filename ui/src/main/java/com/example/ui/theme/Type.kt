@@ -27,17 +27,17 @@ val QuicksandFamily = FontFamily(
 val CloudburstTypography = Typography(
     // Headlines / App Title
     displayLarge = TextStyle(
-        fontFamily = RubikFamily,
+        fontFamily = NunitoFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 36.sp
     ),
     displayMedium = TextStyle(
-        fontFamily = RubikFamily,
+        fontFamily = NunitoFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 28.sp
     ),
     displaySmall = TextStyle(
-        fontFamily = RubikFamily,
+        fontFamily = NunitoFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 24.sp
     ),

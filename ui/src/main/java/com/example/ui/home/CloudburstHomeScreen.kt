@@ -41,9 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.layoutId
-import com.example.ui.theme.FullRoundedShape30
 import com.example.ui.R
 import com.example.ui.theme.CloudburstTheme
+import com.example.ui.theme.FullRoundedShape30
 import com.example.ui.theme.shadowCustom
 
 
@@ -113,17 +113,18 @@ internal fun HomeScreenCompact(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Welcome to Cloudburst",
+                    text = stringResource(R.string.home_welcome),
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
                 AnimatedVisibility(visible = isExpanded) {
                     Text(
                         text = stringResource(R.string.home_city_description),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Justify,
-                        modifier = Modifier.padding(top = dimensionResource(R.dimen.home_text_textbox_padding))
+                        modifier = Modifier.padding(top = dimensionResource(R.dimen.home_text_textbox_padding)),
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
 
@@ -131,6 +132,7 @@ internal fun HomeScreenCompact(
                     Icon(
                         imageVector = if (!isExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
                         contentDescription = stringResource(R.string.expand_content_desc),
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
 
@@ -151,7 +153,11 @@ internal fun HomeScreenCompact(
                         Text(
                             text = stringResource(R.string.explore_button),
                             style = MaterialTheme.typography.headlineMedium,
-                            color = MaterialTheme.colorScheme.inverseOnSurface
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                            modifier = Modifier.padding(
+                                start = dimensionResource(R.dimen.button_text_start_padding),
+                                bottom = dimensionResource(R.dimen.button_text_bottom_padding)
+                            )
                         )
                     }
                 }
@@ -230,8 +236,18 @@ internal fun HomeScreenExpanded() {
 
 @Composable
 @Preview (showBackground = true)
-fun PreviewHomeScreenCompact() {
+fun PreviewHomeScreenCompactLight() {
     CloudburstTheme {
+        HomeScreenCompact(
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+@Composable
+@Preview (showBackground = true)
+fun PreviewHomeScreenCompactDark() {
+    CloudburstTheme(darkTheme = true) {
         HomeScreenCompact(
             modifier = Modifier.fillMaxSize()
         )

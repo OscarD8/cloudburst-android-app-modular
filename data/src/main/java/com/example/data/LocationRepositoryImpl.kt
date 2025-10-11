@@ -26,6 +26,10 @@ class LocationRepositoryImpl @Inject constructor(
         return mapLocationToDomainModel(locationDataEntry)
     }
 
+    override suspend fun getCategories(): List<LocationCategory> {
+        return LocationCategory.entries
+    }
+
 
     private fun mapLocationsListToDomainModels(
         locationsList : List<FakeApiService.LocationDataEntry>

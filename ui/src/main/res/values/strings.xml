@@ -16,10 +16,15 @@
     <string name="error_location">Location not found.</string>
 
     <!-- Home Screen -->
+    <string name="home_welcome">Welcome to Cloudburst</string>
     <string name="home_city_description">Cloudburst is a living organism, its bones grown from mycelium. It feeds from a controlled microclimate, generating an ecological delirium. Iconic streaks of cloud weave above radiant canals, where neon capsules skim the waters, tracing paths through mycelium quarters.
 
     From within this glow you can hear the neon streams flow. And with it, the quiet hum of AI nodes - whizzing orbs that reimagine the world with alien codes.
 
     Cloudburst is where technology, ecology, and beauty are forever interwoven — a solar sanctuary designed to grow, breathe, and shimmer like a being newly awoken. </string>
+
+
+    <!-- Categories Screen -->
+    <string name="category_arrow_content_desc">Navigate to %s</string>
 
 </resources>

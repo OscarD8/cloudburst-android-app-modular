@@ -44,3 +44,12 @@ val TopBarInnerCircle = RoundedCornerShape(
     bottomStart = 0.dp,
     bottomEnd = 0.dp
 )
+
+val ListItemShape = RoundedCornerShape(
+    topStart = 100.dp,
+    topEnd = 100.dp,
+    bottomStart = 30.dp,
+    bottomEnd = 30.dp
+)
+
+val ListItemInternalText = RoundedCornerShape(50.dp)

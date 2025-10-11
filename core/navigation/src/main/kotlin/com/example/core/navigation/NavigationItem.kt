@@ -2,7 +2,6 @@ package com.example.core.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.example.core.navigation.R
 import com.example.domain.model.LocationCategory
 
 /*
@@ -37,33 +36,33 @@ val allNavigationItems = listOf(
 
     // Destinations for specific categories
     NavigationItem(
-        route = Screen.LocationsList.createRoute(LocationCategory.RESTAURANT.name),
+        route = Screen.LocationsList.createRoute(LocationCategory.RESTAURANTS.name),
         icon = R.drawable.ic_restaurant_placeholder_2,
-        locationCategory = LocationCategory.RESTAURANT,
+        locationCategory = LocationCategory.RESTAURANTS,
         labelRes = R.string.restaurant_header
     ),
     NavigationItem(
-        route = Screen.LocationsList.createRoute(LocationCategory.CAFE.name),
+        route = Screen.LocationsList.createRoute(LocationCategory.CAFES.name),
         icon = R.drawable.ic_cafe_placeholder_1,
-        locationCategory = LocationCategory.CAFE,
+        locationCategory = LocationCategory.CAFES,
         labelRes = R.string.cafe_header
     ),
     NavigationItem(
-        route = Screen.LocationsList.createRoute(LocationCategory.PARK.name),
+        route = Screen.LocationsList.createRoute(LocationCategory.PARKS.name),
         icon = R.drawable.ic_park_placeholder_3,
-        locationCategory = LocationCategory.PARK,
+        locationCategory = LocationCategory.PARKS,
         labelRes = R.string.park_header
     ),
     NavigationItem(
-        route = Screen.LocationsList.createRoute(LocationCategory.TEMPLE.name),
+        route = Screen.LocationsList.createRoute(LocationCategory.TEMPLES.name),
         icon = R.drawable.ic_temple_placeholder_2,
-        locationCategory = LocationCategory.TEMPLE,
+        locationCategory = LocationCategory.TEMPLES,
         labelRes = R.string.temple_header
     ),
     NavigationItem(
-        route = Screen.LocationsList.createRoute(LocationCategory.MYCELIUM_PRINTER.name),
+        route = Screen.LocationsList.createRoute(LocationCategory.PRINTERS.name),
         icon = R.drawable.ic_mycelium_printer_placeholder_3,
-        locationCategory = LocationCategory.MYCELIUM_PRINTER,
+        locationCategory = LocationCategory.PRINTERS,
         labelRes = R.string.mycelium_printer_header
     )
 )
