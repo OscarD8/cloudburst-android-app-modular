@@ -1,13 +1,12 @@
-package com.example.ui.locations
+package com.example.ui.locations.detail
 
 import android.app.Application
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetLocationByIdUseCase
 import com.example.ui.R
-import com.example.ui.common.toUiModel
+import com.example.ui.common.LocationMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +19,7 @@ import kotlinx.coroutines.launch
 class LocationDetailViewModel @Inject constructor(
     private val getLocationByIdUseCase: GetLocationByIdUseCase,
     private val application: Application,
+    private val locationMapper: LocationMapper,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LocationDetailUiState())
@@ -44,14 +44,7 @@ class LocationDetailViewModel @Inject constructor(
 
             val location = getLocationByIdUseCase(id)
 
-            if (location != null) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        location = location.toUiModel()  //TODO - Unsure whether to make mapper a class and use dependency injection for context
-                    )
-                }
-            }
+            val locationUiModel = locationMapper.to(location)
         }
     }
 }

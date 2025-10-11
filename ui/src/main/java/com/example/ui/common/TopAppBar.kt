@@ -16,11 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.ui.R
 import com.example.ui.theme.BottomRoundedShape30
-import com.example.ui.theme.PopUpShape
-import com.example.ui.theme.SunriseShape
+import com.example.ui.theme.CloudburstTheme
+import com.example.ui.theme.TopBarInnerCircle
+import com.example.ui.theme.TopBarOuterCircle
 import com.example.ui.theme.shadowCustom
 
 
@@ -30,7 +31,6 @@ import com.example.ui.theme.shadowCustom
  * Displays the current screen's title and a unique decorative "sunrise" element on the right.
  * It features a custom shadow and a clipped shape for a distinct visual identity.
  *
- * @param currentScreen The [CloudburstScreen] enum for the currently displayed screen.
  * @param modifier A [Modifier] to be applied to the app bar.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,14 +60,14 @@ fun CloudburstTopAppBar(
                             height = dimensionResource(R.dimen.sunrise_shape_height)
                         ),
                     color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = SunriseShape
+                    shape = TopBarOuterCircle
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Surface(
                             color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = PopUpShape,
+                            shape = TopBarInnerCircle,
                             modifier = Modifier
                                 .size(dimensionResource(R.dimen.inner_circle_size))
                                 .align(Alignment.BottomEnd)
@@ -91,4 +91,14 @@ fun CloudburstTopAppBar(
             )
             .clip(BottomRoundedShape30)
     )
+}
+
+@Preview
+@Composable
+fun PreviewTopAppBar() {
+    CloudburstTheme {
+        CloudburstTopAppBar(
+            screenTitle = "Cloudburst"
+        )
+    }
 }

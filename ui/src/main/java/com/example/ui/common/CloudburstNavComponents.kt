@@ -22,7 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.navigation.NavigationItem
-import com.example.core.navigation.navigationItems
+import com.example.core.navigation.Screen
+import com.example.core.navigation.allNavigationItems
+import com.example.core.navigation.expandedNavList
+import com.example.core.navigation.minimisedNavList
 import com.example.ui.R
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.TopRoundedShape30
@@ -45,26 +48,26 @@ import com.example.domain.model.LocationCategory
 @Composable
 fun CloudburstNavigationDrawerContent(
     modifier: Modifier = Modifier,
-    navItems: List<NavigationItem> = navigationItems,
-    currentTab: NavigationItem,
-    onTabPressed: (LocationCategory) -> Unit
+    navItems: List<NavigationItem> = expandedNavList,
+    currentRoute: String,
+    onTabPressed: (String) -> Unit
 ) {
     navItems.forEach { navItem ->
         NavigationDrawerItem(
             label = {
                 Text(
-                    text = stringResource(navItem.route),
+                    text = stringResource(navItem.labelRes),
                     fontWeight = FontWeight.SemiBold
                 )
             },
             icon = {
                 Icon(
                     painter = painterResource(navItem.icon),
-                    contentDescription = stringResource(navItem.route),
+                    contentDescription = stringResource(navItem.labelRes),
                 )
             },
-            selected = currentCategory == navItem.locationCategory,
-            onClick = { onTabPressed(navItem.locationCategory) },
+            selected = navItem.route == currentRoute,
+            onClick = { onTabPressed(navItem.route) }, // when you press a tab you pass up its navItem route
             colors = NavigationDrawerItemDefaults
                 .colors(
                     selectedContainerColor = MaterialTheme.colorScheme.onPrimary,
@@ -88,22 +91,22 @@ fun CloudburstNavigationDrawerContent(
  */
 @Composable
 fun CloudburstNavigationRail(
-    currentCategory: LocationCategory,
-    onTabPressed: (LocationCategory) -> Unit,
     modifier: Modifier = Modifier,
-    navItems: List<NavigationItem> = navigationItems,
+    navItems: List<NavigationItem> = minimisedNavList,
+    currentRoute: String,
+    onTabPressed: (String) -> Unit,
 ) {
     NavigationRail(modifier = modifier) {
-        navigationItems.forEach { navItem ->
+        minimisedNavList.forEach { navItem ->
             NavigationRailItem(
-                selected = navItem.locationCategory == currentCategory,
+                selected = navItem.route == currentRoute,
                 icon = {
                     Icon(
                         painter = painterResource(navItem.icon),
-                        contentDescription = stringResource(navItem.route)
+                        contentDescription = stringResource(navItem.labelRes)
                     )
                 },
-                onClick = { onTabPressed(navItem.locationCategory) }
+                onClick = { onTabPressed(navItem.route) }
             )
         }
     }
@@ -122,10 +125,10 @@ fun CloudburstNavigationRail(
  */
 @Composable
 fun CloudburstNavBar(
-    currentCategory: LocationCategory,
-    onTabPressed: (LocationCategory) -> Unit,
     modifier: Modifier = Modifier,
-    navItems: List<NavigationItem> = navigationItems,
+    navItems: List<NavigationItem> = minimisedNavList,
+    currentRoute: String,
+    onTabPressed: (String) -> Unit,
 ) {
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -139,19 +142,19 @@ fun CloudburstNavBar(
     ) {
         navItems.forEach { navItem ->
             NavigationBarItem(
-                selected = currentCategory == navItem.locationCategory,
+                selected = currentRoute == navItem.route,
                 onClick = {
-                    onTabPressed(navItem.locationCategory)
+                    onTabPressed(navItem.route)
                 },
                 icon = {
                     Icon(
                         painter = painterResource(navItem.icon),
-                        contentDescription = stringResource(navItem.route)
+                        contentDescription = stringResource(navItem.labelRes)
                     )
                 },
                 label = {
                     Text(
-                        text = stringResource(navItem.route),
+                        text = stringResource(navItem.labelRes),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
@@ -171,7 +174,7 @@ fun CloudburstNavBar(
 fun PreviewNavBar() {
     CloudburstTheme {
         CloudburstNavBar(
-            currentCategory = LocationCategory.RESTAURANT, // BOOLEAN FOR HOME?
+            currentRoute = Screen.Home.route,
             onTabPressed = {},
             modifier = Modifier
                 .fillMaxWidth()

@@ -1,12 +1,12 @@
-package com.example.ui.locations
+package com.example.ui.locations.list
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.LocationCategory
 import com.example.domain.usecase.GetLocationsByCategoryUseCase
-import com.example.ui.common.ListScreenUiState
-import com.example.ui.common.toUiModel
+import com.example.ui.locations.list.ListScreenUiState
+import com.example.ui.common.LocationMapper
+import com.example.ui.locations.LocationUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class LocationsListViewModel @Inject constructor(
     private val getLocationsByCategoryUseCase: GetLocationsByCategoryUseCase,
-    private val application: Application
+    private val locationMapper: LocationMapper
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ListScreenUiState<LocationUiModel>())
     val uiState: StateFlow<ListScreenUiState<LocationUiModel>> = _uiState.asStateFlow()
@@ -32,7 +32,7 @@ class LocationsListViewModel @Inject constructor(
             val locationsFromDomain = getLocationsByCategoryUseCase.invoke(category)
 
             val locationsForUi = locationsFromDomain.map { location ->
-                location.toUiModel(application)
+                locationMapper.toUiModel(location)
             }
 
             _uiState.update {

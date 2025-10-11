@@ -4,30 +4,36 @@ import android.content.Context
 import com.example.domain.model.Location
 import com.example.ui.R
 import com.example.ui.locations.LocationUiModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import jakarta.inject.Inject
 
 /**
  * A reusable mapper function to convert a domain Location into a UI-ready LocationUiModel.
  */
-fun Location.toUiModel(context: Context): LocationUiModel {
-    val resources = context.resources
-    val packageName = context.packageName
+class LocationMapper @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
+    fun toUiModel(location: Location): LocationUiModel {
+        val resources = context.resources
+        val packageName = context.packageName
 
-    val imageResId = resources.getIdentifier(
-        this.imageIdentifier,
-        "drawable",
-        packageName
-    )
+        val imageResId = resources.getIdentifier(
+            location.imageIdentifier,
+            "drawable",
+            packageName
+        )
 
-    return LocationUiModel(
-        id = this.id,
-        name = this.name,
-        address = this.address,
-        description = this.description,
-        imageIdentifier = if (imageResId != 0) imageResId else R.drawable.home_cover_image,
-        rating = this.rating,
-        isCarbonCapturing = this.isCarbonCapturing,
-        category = this.category,
-        isFavourite = this.isFavourite,
-        isExpanded = false
-    )
+        return LocationUiModel(
+            id = location.id,
+            name = location.name,
+            address = location.address,
+            description = location.description,
+            imageIdentifier = if (imageResId != 0) imageResId else R.drawable.home_cover_image,
+            rating = location.rating,
+            isCarbonCapturing = location.isCarbonCapturing,
+            category = location.category,
+            isFavourite = location.isFavourite,
+            isExpanded = false
+        )
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.ui.locations
+package com.example.ui.locations.list
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items

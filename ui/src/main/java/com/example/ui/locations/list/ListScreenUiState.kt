@@ -1,4 +1,4 @@
-package com.example.ui.common
+package com.example.ui.locations.list
 
 data class ListScreenUiState<T> (
     val isLoading: Boolean = false,

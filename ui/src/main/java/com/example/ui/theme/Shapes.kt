@@ -3,9 +3,9 @@ package com.example.ui.theme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 
-val SunriseShape = RoundedCornerShape(
-    topStart = 75.dp,
-    topEnd = 75.dp,
+val TopBarOuterCircle = RoundedCornerShape(
+    topStart = 50.dp,
+    topEnd = 50.dp,
     bottomStart = 0.dp,
     bottomEnd = 0.dp
 )
@@ -38,7 +38,7 @@ val FullRoundedShape30 = RoundedCornerShape(
     bottomEnd = 30.dp
 )
 
-val PopUpShape = RoundedCornerShape(
+val TopBarInnerCircle = RoundedCornerShape(
     topStart = 60.dp,
     topEnd = 60.dp,
     bottomStart = 0.dp,

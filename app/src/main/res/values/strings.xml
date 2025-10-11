@@ -6,5 +6,6 @@
     <string name="screen_title_favourites">Favourites</string>
     <string name="screen_title_locations_list">Locations</string>
     <string name="screen_title_location_detail">Details</string>
+    <string name="placeholder"> </string>
 
 </resources>

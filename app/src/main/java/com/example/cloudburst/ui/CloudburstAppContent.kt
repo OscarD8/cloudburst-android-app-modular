@@ -1,10 +1,9 @@
-package com.example.ui.common
+package com.example.cloudburst.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,6 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavHostController
+import com.example.cloudburst.navigation.AppNavHost
+import com.example.ui.R
+import com.example.ui.common.CloudburstNavigationDrawerContent
+import com.example.ui.common.CloudburstNavigationRail
+import com.example.ui.theme.RightSideRoundedShape30
+import com.example.ui.theme.shadowCustom
+import com.example.ui.utils.CloudburstContentType
+import com.example.ui.utils.CloudburstNavigationType
 
 
 /**
@@ -35,11 +42,11 @@ import androidx.navigation.NavHostController
 @Composable
 fun CloudburstAppContent(
     windowSize: WindowWidthSizeClass,
-    locationUiState: LocationUiState,
     navController: NavHostController,
     navigationType: CloudburstNavigationType,
     contentType: CloudburstContentType,
-    onTabPressed: (LocationCategory) -> Unit,
+    currentRoute: String,
+    onTabPressed: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (navigationType) {
@@ -52,7 +59,7 @@ fun CloudburstAppContent(
                     ) {
                         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.navdrawer_spacer_height)))
                         CloudburstNavigationDrawerContent(
-                            currentCategory = locationUiState.currentLocationCategory,
+                            currentRoute = currentRoute,
                             onTabPressed = onTabPressed,
                             modifier = Modifier.padding(dimensionResource(R.dimen.navdrawer_item_horizontal_padding))
                         )
@@ -66,18 +73,14 @@ fun CloudburstAppContent(
                         shapeRadius = dimensionResource(R.dimen.shadow_shape_radius),
                     )
             ) {
-                CloudburstNavHost(
-                    navController = navController,
-                    windowSize = windowSize,
-                    modifier = modifier
-                )
+                AppNavHost(navController, windowSize)
             }
         }
         else -> {
             Row(modifier = modifier) {
                 AnimatedVisibility(visible = navigationType == CloudburstNavigationType.NAVIGATION_RAIL) {
                     CloudburstNavigationRail(
-                        currentCategory = locationUiState.currentLocationCategory,
+                        currentRoute = currentRoute,
                         onTabPressed = onTabPressed,
                         modifier = Modifier
                     )
@@ -85,11 +88,7 @@ fun CloudburstAppContent(
                 Column(
                     modifier = Modifier.weight(1f),
                 ) {
-                    CloudburstNavHost(
-                        navController = navController,
-                        windowSize = windowSize,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    AppNavHost(navController, windowSize)
                 }
             }
         }

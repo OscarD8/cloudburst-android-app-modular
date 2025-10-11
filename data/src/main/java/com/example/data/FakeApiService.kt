@@ -135,13 +135,9 @@ object FakeApiService {
         imageIdentifier = "placeholder_image",
         rating = 0,
         isCarbonCapturing = false,
-        category = LocationCategory.UNKNOWN, // You'll need to add UNKNOWN to your enum
+        category = LocationCategory.UNKNOWN,
         isFavourite = false
     )
-
-    internal fun getAllLocations(): List<LocationDataEntry> {
-        return allLocations
-    }
 
     internal fun getLocationsByCategory(category: LocationCategory): List<LocationDataEntry> {
         return when (category) {

@@ -1,4 +1,4 @@
-package com.example.ui.locations
+package com.example.ui.locations.detail
 
 import androidx.annotation.DrawableRes
 import com.example.domain.model.LocationCategory

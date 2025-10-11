@@ -1,4 +1,6 @@
-package com.example.ui.locations
+package com.example.ui.locations.detail
+
+import com.example.ui.locations.LocationUiModel
 
 data class LocationDetailUiState (
     val location : LocationUiModel? = null,
