@@ -1,5 +1,6 @@
 package com.example.ui.locations.list
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.LocationCategory
@@ -18,13 +19,25 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class LocationsListViewModel @Inject constructor(
     private val getLocationsByCategoryUseCase: GetLocationsByCategoryUseCase,
-    private val locationMapper: LocationMapper
+    private val locationMapper: LocationMapper,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ListScreenUiState<LocationUiModel>())
     val uiState: StateFlow<ListScreenUiState<LocationUiModel>> = _uiState.asStateFlow()
 
     init {
+        val categoryName: String? = savedStateHandle["category"]
 
+        if (categoryName != null) {
+            try {
+                val category = LocationCategory.valueOf(categoryName.uppercase())
+                loadLocations(category)
+            } catch (e: IllegalArgumentException) {
+                _uiState.value = ListScreenUiState(error = "Invalid category specified.")
+            }
+        } else {
+            _uiState.value = ListScreenUiState(error = "Unable to load category.")
+        }
     }
 
     private fun loadLocations(category: LocationCategory) {
@@ -41,6 +54,19 @@ class LocationsListViewModel @Inject constructor(
                     items = locationsForUi
                 )
             }
+        }
+    }
+
+    fun toggleLocationItemExpanded(itemId: Long) {
+        _uiState.update { currentState ->
+            val updatedItems = currentState.items.map { item ->
+                if (itemId == item.id) {
+                    item.copy(isExpanded = !item.isExpanded)
+                } else {
+                    item
+                }
+            }
+            currentState.copy(items = updatedItems)
         }
     }
 

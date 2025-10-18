@@ -67,7 +67,7 @@ fun CloudburstApp(
             AnimatedVisibility(visible = navigationType == CloudburstNavigationType.BOTTOM_NAVBAR) {
                 CloudburstNavBar(
                     currentRoute = currentRoute,
-                    onTabPressed = {  },
+                    onTabPressed = { route -> navController.navigate(route) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }

@@ -52,4 +52,9 @@ val ListItemShape = RoundedCornerShape(
     bottomEnd = 30.dp
 )
 
+val ExpandedListItemShape = RoundedCornerShape(
+    bottomStart = 80.dp,
+    bottomEnd = 80.dp
+)
+
 val ListItemInternalText = RoundedCornerShape(50.dp)

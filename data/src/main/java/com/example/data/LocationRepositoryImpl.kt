@@ -22,7 +22,6 @@ class LocationRepositoryImpl @Inject constructor(
 
     override suspend fun getLocationById(id: Long): Location {
         val locationDataEntry = FakeApiService.getLocationById(id)
-            ?: FakeApiService.defaultLocation
         return mapLocationToDomainModel(locationDataEntry)
     }
 
@@ -50,7 +49,7 @@ class LocationRepositoryImpl @Inject constructor(
     }
 
     private fun mapLocationToDomainModel(
-        locationDataEntry : FakeApiService.LocationDataEntry
+        locationDataEntry: FakeApiService.LocationDataEntry
     ) : Location {
         return Location(
             id = locationDataEntry.id,

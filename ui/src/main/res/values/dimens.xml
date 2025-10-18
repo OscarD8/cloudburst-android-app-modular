@@ -47,4 +47,6 @@
     <dimen name="list_item_width">363.dp</dimen>
     <dimen name="list_item_height">153.dp</dimen>
     <dimen name="list_item_next_arrow_box">72.dp</dimen>
+    <dimen name="list_item_expanded_width">283.dp</dimen>
+    <dimen name="list_item_expanded_height">149.dp</dimen>
 </resources>

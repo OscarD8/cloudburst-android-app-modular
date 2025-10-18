@@ -1,5 +1,6 @@
 package com.example.ui.common
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -143,9 +144,7 @@ fun CloudburstNavBar(
         navItems.forEach { navItem ->
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
-                onClick = {
-                    onTabPressed(navItem.route)
-                },
+                onClick = { onTabPressed(navItem.route) },
                 icon = {
                     Icon(
                         painter = painterResource(navItem.icon),

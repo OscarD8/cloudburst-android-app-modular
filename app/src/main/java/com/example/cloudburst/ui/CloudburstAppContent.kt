@@ -60,7 +60,7 @@ fun CloudburstAppContent(
                         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.navdrawer_spacer_height)))
                         CloudburstNavigationDrawerContent(
                             currentRoute = currentRoute,
-                            onTabPressed = onTabPressed,
+                            onTabPressed = { route -> onTabPressed(route) },
                             modifier = Modifier.padding(dimensionResource(R.dimen.navdrawer_item_horizontal_padding))
                         )
                     }

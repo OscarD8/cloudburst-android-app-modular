@@ -13,5 +13,5 @@ data class Location(
 )
 
 enum class LocationCategory{
-    RESTAURANTS, CAFES, PARKS, TEMPLES, PRINTERS, UNKNOWN
+    RESTAURANTS, CAFES, PARKS, TEMPLES, PRINTERS
 }

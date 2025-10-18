@@ -127,17 +127,6 @@ object FakeApiService {
     )
 
     internal val allLocations = allRestaurants + allCafes + allParks + allTemples + allPrinters
-    internal val defaultLocation = LocationDataEntry(
-        id = -1L,
-        nameRes = R.string.unknown_location_name,
-        addressRes = R.string.unknown_location_address,
-        descriptionRes = R.string.unknown_location_description,
-        imageIdentifier = "placeholder_image",
-        rating = 0,
-        isCarbonCapturing = false,
-        category = LocationCategory.UNKNOWN,
-        isFavourite = false
-    )
 
     internal fun getLocationsByCategory(category: LocationCategory): List<LocationDataEntry> {
         return when (category) {
@@ -146,11 +135,10 @@ object FakeApiService {
             LocationCategory.PARKS -> allParks
             LocationCategory.TEMPLES -> allTemples
             LocationCategory.PRINTERS -> allPrinters
-            else -> emptyList()
         }
     }
 
-    internal fun getLocationById(locationId: Long): LocationDataEntry? {
-        return allLocations.firstOrNull {it.id == locationId}
+    internal fun getLocationById(locationId: Long): LocationDataEntry {
+        return allLocations.first() {it.id == locationId}
     }
 }

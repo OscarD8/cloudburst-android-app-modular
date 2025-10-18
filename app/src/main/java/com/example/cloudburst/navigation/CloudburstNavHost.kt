@@ -5,8 +5,10 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.core.navigation.Screen
 import com.example.ui.categories.CategoriesScreen
 import com.example.ui.home.CloudburstHomeScreen
@@ -34,13 +36,19 @@ fun AppNavHost(
             )
         }
 
-
-
         // One composable handles all location list screens
-        composable(Screen.LocationsList.route) {
+        composable(
+            route = Screen.LocationsList.route,
+            arguments = listOf(
+                navArgument("category") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
             // LocationsListScreen's viewmodel will use the "category" argument
             // from the route to fetch the correct data
             LocationsListScreen(
+                windowSize = windowSize,
                 onLocationClicked = { locationId ->
                     navController.navigate(Screen.LocationDetail.createRoute(locationId))
                 },

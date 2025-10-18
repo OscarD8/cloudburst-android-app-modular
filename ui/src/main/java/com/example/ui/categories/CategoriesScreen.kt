@@ -26,11 +26,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.domain.model.LocationCategory
@@ -38,7 +45,7 @@ import com.example.ui.R
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.ListItemInternalText
 import com.example.ui.theme.ListItemShape
-import java.util.Locale
+import com.example.ui.theme.shadowCustom
 
 @Composable
 fun CategoriesScreen(
@@ -102,7 +109,8 @@ private fun CategoriesScreenCompact (
 ) {
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium))
+        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         itemsIndexed(categoriesList) { index, category ->
             val alignmentForThisItem = backgroundCropPresets[index % backgroundCropPresets.size]
@@ -157,6 +165,13 @@ private fun CategoryListItem(
     Card (
         shape = ListItemShape,
         modifier = modifier
+            .dropShadow(ListItemShape, shadow = androidx.compose.ui.graphics.shadow.Shadow(
+                radius = 4.dp,
+                spread = 3.dp,
+                color = Color.Gray,
+                offset = DpOffset(x = 0.dp, 2.dp)
+            )
+        )
     ) {
         Box {
             Image(
@@ -185,12 +200,18 @@ private fun CategoryListItem(
                             height = dimensionResource(R.dimen.list_item_internal_text_height)
                         )
                         .clip(ListItemInternalText)
-                        .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+                        .background(color = MaterialTheme.colorScheme.onSurface)
+                        .shadowCustom(
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                            blurRadius = 4.dp,
+                            shapeRadius = 50.dp
+                        )
                 ) {
                     Text(
                         text = getTranslatedCategoryName(category),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -199,14 +220,20 @@ private fun CategoryListItem(
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(dimensionResource(R.dimen.list_item_next_arrow_box))
-                        .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+                        .background(color = MaterialTheme.colorScheme.onSurface)
+                        .shadowCustom(
+                            blurRadius = 4.dp,
+                            shapeRadius = 50.dp,
+                            color = MaterialTheme.colorScheme.inverseOnSurface
+                        )
                 ) {
                     IconButton (
                         onClick = { onCategorySelected(category) },
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         Icon(
                             imageVector = Icons.Default.KeyboardDoubleArrowRight,
-                            contentDescription = stringResource(R.string.category_arrow_content_desc, category)
+                            contentDescription = stringResource(R.string.category_arrow_content_desc, category),
                         )
                     }
                 }
@@ -223,7 +250,6 @@ private fun getTranslatedCategoryName(category: LocationCategory): String {
         LocationCategory.PARKS -> stringResource(R.string.park_header)
         LocationCategory.TEMPLES -> stringResource(R.string.temple_header)
         LocationCategory.PRINTERS -> stringResource(R.string.mycelium_printer_header)
-        LocationCategory.UNKNOWN -> stringResource(R.string.error_location)
     }
 }
 
@@ -244,3 +270,19 @@ fun PreviewCategoryItem() {
     }
 }
 
+@Preview
+@Composable
+fun PreviewCategoryItemDark() {
+    CloudburstTheme(darkTheme = true) {
+        CategoryListItem(
+            category = LocationCategory.RESTAURANTS,
+            onCategorySelected = {},
+            cropAlignment = Alignment.TopStart,
+            modifier = Modifier
+                .size(
+                    width = dimensionResource(R.dimen.list_item_width),
+                    height = dimensionResource(R.dimen.list_item_height)
+                )
+        )
+    }
+}
