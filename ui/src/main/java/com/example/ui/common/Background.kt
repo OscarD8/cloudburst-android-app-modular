@@ -16,9 +16,9 @@ import com.example.ui.R
 /**
  * A consistent background composable for the entire app.
  *
- * It displays a static background image that fills the screen. It intelligently applies
- * a semi-transparent dark overlay when the system's dark theme is active to ensure
- * content readability and improve aesthetics. ✨
+ * It displays a static background image that fills the screen. It applies
+ * a semi-transparent dark overlay when the system's dark theme is active for
+ * content readability. ✨
  *
  * @param modifier A [Modifier] to be applied to the background container.
  */

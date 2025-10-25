@@ -5,7 +5,17 @@ import androidx.annotation.StringRes
 import com.example.domain.model.LocationCategory
 
 /*
-    Defines the visual elements to navigation that the user can interact with.
+    Defines the UI elements to navigation that the user can interact with.
+    These are purely for displaying within the navigation components.
+    Each holds a route used in connection with the NavHost.
+ */
+
+/**
+ * NavigationItems - UI elements to be displayed in the navigation component.
+ * @param route The route, similar to a URL, handled by the NavHost.
+ * @param locationCategory Required in some NavItems to retrieve a list of locations by category.
+ * @param icon The icon to be displayed in the navigation component.
+ * @param labelRes The human readable label to be displayed in the navigation component.
  */
 data class NavigationItem(
     val route: String,
@@ -14,7 +24,7 @@ data class NavigationItem(
     @StringRes val labelRes: Int
 )
 
-val allNavigationItems = listOf(
+private val allNavigationItems = listOf(
     NavigationItem(
         route = Screen.Home.route,
         icon = R.drawable.ic_home,
@@ -67,9 +77,22 @@ val allNavigationItems = listOf(
     )
 )
 
+/**
+ * Expanded devices display a navigation drawer. There is no need for a Categories screen
+ * navigation element due to each category being displayed directly in the drawer.
+ */
 val expandedNavList = allNavigationItems.filter { it.route != Screen.Categories.route }
+
+/**
+ * Medium and Compact devices display a navigation rail or bar respectively. A single
+ * Categories screen and navigable element are used to replace listing out each
+ * category as a unique navigation destination in the navigation component.
+ */
 val minimisedNavList = allNavigationItems.filter { it.locationCategory == null }
 
+/**
+ * Map to retrieve a NavigationItem (UI element) by its route.
+ */
 val navigationItemMap: Map<String, NavigationItem> = allNavigationItems.associateBy { it.route }
 
 

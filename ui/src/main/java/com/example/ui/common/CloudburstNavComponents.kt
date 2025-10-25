@@ -1,6 +1,5 @@
 package com.example.ui.common
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -24,14 +23,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.navigation.NavigationItem
 import com.example.core.navigation.Screen
-import com.example.core.navigation.allNavigationItems
 import com.example.core.navigation.expandedNavList
 import com.example.core.navigation.minimisedNavList
+import com.example.domain.model.LocationCategory
 import com.example.ui.R
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.TopRoundedShape30
 import com.example.ui.theme.shadowCustom
-import com.example.domain.model.LocationCategory
 
 /**
  * Renders the content within a permanent navigation drawer, typically used for large screens.

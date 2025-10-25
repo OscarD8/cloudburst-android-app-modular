@@ -21,18 +21,24 @@ import com.example.core.navigation.navigationItemMap
 import com.example.ui.common.CloudburstBackground
 import com.example.ui.common.CloudburstNavBar
 import com.example.ui.common.CloudburstTopAppBar
-import com.example.ui.utils.CloudburstContentType
-import com.example.ui.utils.CloudburstNavigationType
+import com.example.cloudburst.MainActivity
 
-
+/**
+ * Foundation of the UI. Sets contentType and navigationType
+ */
 @Composable
-fun CloudburstApp(
+fun CloudburstAppBase(
     windowSize: WindowWidthSizeClass,
     navController: NavHostController = rememberNavController()
 ) {
     val contentType: CloudburstContentType
     val navigationType: CloudburstNavigationType
 
+    /** On any config change or app initialisation, [MainActivity] passes
+     * the current window width size to [CloudburstAppBase]. Enums are then
+     * assigned, which determine the navigation type wrapping the content
+     * and whether the content itself will enable list only or list and detail.
+     */
     when (windowSize) {
         WindowWidthSizeClass.Compact -> {
             contentType = CloudburstContentType.LIST_ONLY
@@ -54,9 +60,15 @@ fun CloudburstApp(
 
     val backStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: Screen.Home.route
-    val currentNavItem = navigationItemMap[currentRoute]
+    // Using the current route, we can look up the associated navigation item to
+    // enable a fetch of the title (label) related to that route.
+    val currentNavItem = navigationItemMap[currentRoute] // this can be null (in which case when fetching title just take app name)
     val currentTitle = currentNavItem?.labelRes  ?: R.string.app_name
 
+    /**
+     * Establishing the UI contained in a Scaffold within the Surface established in MainActivity.
+     * Bottom bar only on compact devices.
+     */
     Scaffold(
         topBar = {
             CloudburstTopAppBar(
@@ -72,16 +84,16 @@ fun CloudburstApp(
                 )
             }
         },
-        containerColor = Color.Transparent
+        containerColor = Color.Transparent // As working with background wallpaper for the app content.
     ) {
         CloudburstBackground(modifier = Modifier.fillMaxSize())
 
-        CloudburstAppContent(
+        CloudburstNavigationBase(
             windowSize = windowSize,
             navController = navController,
             navigationType = navigationType,
             contentType = contentType,
-            onTabPressed = { route -> navController.navigate(route)},
+            onTabPressed = { route -> navController.navigate(route)}, // what causes the navigation
             currentRoute = currentRoute,
             modifier = Modifier.padding(it)
         )

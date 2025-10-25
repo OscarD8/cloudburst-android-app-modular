@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -15,24 +16,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavHostController
-import com.example.cloudburst.navigation.AppNavHost
+import com.example.cloudburst.navigation.CloudburstNavHost
 import com.example.ui.R
 import com.example.ui.common.CloudburstNavigationDrawerContent
 import com.example.ui.common.CloudburstNavigationRail
 import com.example.ui.theme.RightSideRoundedShape30
 import com.example.ui.theme.shadowCustom
-import com.example.ui.utils.CloudburstContentType
-import com.example.ui.utils.CloudburstNavigationType
-
 
 /**
- * Renders the main content area of the app based on the selected navigation type.
+ * Notes:
+ * At this point the hierarchy is:
+ * Surface > Scaffold (possible NavBar, Background, TopAppBar). So now on to content.
+ *
+ */
+
+/**
+ * In the context of the app content area - establishes navigation components
+ * if their context is out of the scaffold (not a Compact device).
+ * Alongside any Nav component implementations, makes the call to compose
+ * the app screen composables by calling the NavHost.
  *
  * This composable arranges the primary UI elements, such as the navigation rail or
  * permanent drawer, alongside the main content host ([CloudburstNavHost]).
  *
- * @param windowSize The current window size class.
- * @param locationUiState The state object from the ViewModel.
+ * @param windowSize The current window size class. Needed to pass through to Screen Composables.
  * @param navController The navigation controller.
  * @param navigationType The determined navigation strategy (e.g., Rail, Drawer).
  * @param contentType The determined content strategy (e.g., List only).
@@ -40,7 +47,7 @@ import com.example.ui.utils.CloudburstNavigationType
  * @param modifier A [Modifier] to be applied to the root layout.
  */
 @Composable
-fun CloudburstAppContent(
+fun CloudburstNavigationBase(
     windowSize: WindowWidthSizeClass,
     navController: NavHostController,
     navigationType: CloudburstNavigationType,
@@ -56,11 +63,12 @@ fun CloudburstAppContent(
                     PermanentDrawerSheet (
                         drawerContainerColor = MaterialTheme.colorScheme.primaryContainer,
                         drawerShape = RightSideRoundedShape30,
+                        modifier = modifier
                     ) {
                         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.navdrawer_spacer_height)))
                         CloudburstNavigationDrawerContent(
                             currentRoute = currentRoute,
-                            onTabPressed = { route -> onTabPressed(route) },
+                            onTabPressed = onTabPressed,
                             modifier = Modifier.padding(dimensionResource(R.dimen.navdrawer_item_horizontal_padding))
                         )
                     }
@@ -73,24 +81,25 @@ fun CloudburstAppContent(
                         shapeRadius = dimensionResource(R.dimen.shadow_shape_radius),
                     )
             ) {
-                AppNavHost(navController, windowSize)
+                CloudburstNavHost(navController, windowSize, modifier = Modifier.fillMaxSize())
             }
         }
-        else -> {
-            Row(modifier = modifier) {
-                AnimatedVisibility(visible = navigationType == CloudburstNavigationType.NAVIGATION_RAIL) {
-                    CloudburstNavigationRail(
-                        currentRoute = currentRoute,
-                        onTabPressed = onTabPressed,
-                        modifier = Modifier
-                    )
-                }
+        CloudburstNavigationType.NAVIGATION_RAIL -> {
+            Row(modifier = modifier) { // Medium device content wraps in a row the rail and the content.
+                CloudburstNavigationRail(
+                    currentRoute = currentRoute,
+                    onTabPressed = onTabPressed, // placeholder to pass route up to AppBase.
+                    modifier = Modifier  //TODO
+                )
                 Column(
                     modifier = Modifier.weight(1f),
                 ) {
-                    AppNavHost(navController, windowSize)
+                    CloudburstNavHost(navController, windowSize, modifier = Modifier.fillMaxSize())
                 }
             }
+        }
+        else -> {
+            CloudburstNavHost(navController, windowSize, modifier)
         }
     }
 }
