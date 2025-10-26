@@ -5,7 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -16,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ui.R
+import com.example.core.navigation.R as NavR
 import com.example.ui.theme.BottomRoundedShape30
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.TopBarInnerCircle
@@ -37,7 +43,9 @@ import com.example.ui.theme.shadowCustom
 @Composable
 fun CloudburstTopAppBar(
     screenTitle: String,
-    modifier: Modifier = Modifier
+    onNavigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
+    canNavigateBack: Boolean = false
 ) {
     TopAppBar(
         title = {
@@ -46,6 +54,18 @@ fun CloudburstTopAppBar(
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onTertiaryContainer
             )
+        },
+        navigationIcon = {
+            if (canNavigateBack && screenTitle != stringResource(NavR.string.home_header)) {
+                IconButton(
+                    onClick = onNavigateUp,
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                    )
+                }
+            }
         },
         actions = {
             Box{
@@ -86,7 +106,7 @@ fun CloudburstTopAppBar(
             .fillMaxWidth()
             .shadowCustom(
                 offsetY = dimensionResource(id = R.dimen.shadow_offset_y),
-                blurRadius = dimensionResource(id = R.dimen.shadow_blur_radius),
+                blurRadius = dimensionResource(id = R.dimen.shadow_radius_standard),
                 shapeRadius = dimensionResource(id = R.dimen.shadow_shape_radius)
             )
             .clip(BottomRoundedShape30)
@@ -98,7 +118,9 @@ fun CloudburstTopAppBar(
 fun PreviewTopAppBar() {
     CloudburstTheme {
         CloudburstTopAppBar(
-            screenTitle = "Cloudburst"
+            screenTitle = "Cloudburst",
+            canNavigateBack = true,
+            onNavigateUp = {}
         )
     }
 }

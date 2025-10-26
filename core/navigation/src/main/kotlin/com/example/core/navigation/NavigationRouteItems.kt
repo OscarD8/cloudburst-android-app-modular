@@ -42,7 +42,7 @@ sealed class Screen(val route: String) {
      * @param category The name of the category to display (e.g., "CAFE", "RESTAURANT").
      * @return The fully formed route string (e.g., "locations/CAFE").
      */
-    data object LocationsList : Screen("locations/{category}", ) {
+    data object LocationsList : Screen("locations/{category}") { // prefixes help with ambiguity of NavArgs
         fun createRoute(category: String) = "locations/$category"
     }
 

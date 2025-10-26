@@ -1,11 +1,13 @@
 package com.example.ui.locations.list
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.LocationCategory
 import com.example.domain.usecase.GetLocationsByCategoryUseCase
-import com.example.ui.locations.list.ListScreenUiState
+import com.example.ui.R
+import com.example.ui.common.ListScreenUiState
 import com.example.ui.common.LocationMapper
 import com.example.ui.locations.LocationUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,17 +18,27 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * A viewmodel for the locations list screen.
+ * Responsible for loading the locations from the domain layer and mapping them to the UI model.
+ * Provides a method to toggle the expanded state of a location item.
+ *
+ * @property getLocationsByCategoryUseCase The use case to get locations by category.
+ * @property locationMapper The mapper to map the domain model to the UI model.
+ * @property savedStateHandle The saved state handle to get the category from the navigation arguments.
+ */
 @HiltViewModel
 class LocationsListViewModel @Inject constructor(
     private val getLocationsByCategoryUseCase: GetLocationsByCategoryUseCase,
     private val locationMapper: LocationMapper,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle // bridging navigation arguments to the viewmodel lifecycle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ListScreenUiState<LocationUiModel>())
     val uiState: StateFlow<ListScreenUiState<LocationUiModel>> = _uiState.asStateFlow()
+    val categoryName: String? = savedStateHandle["category"]
 
     init {
-        val categoryName: String? = savedStateHandle["category"]
+        Log.d("LocationsListViewModel", "Category name: $categoryName")
 
         if (categoryName != null) {
             try {
@@ -40,6 +52,9 @@ class LocationsListViewModel @Inject constructor(
         }
     }
 
+    /*
+     * Loads the locations from the domain layer and maps them to the UI model.
+     */
     private fun loadLocations(category: LocationCategory) {
         viewModelScope.launch {
             val locationsFromDomain = getLocationsByCategoryUseCase.invoke(category)
@@ -54,6 +69,17 @@ class LocationsListViewModel @Inject constructor(
                     items = locationsForUi
                 )
             }
+        }
+    }
+
+    fun getLocationCategory(): LocationCategory? {
+        return categoryName?.let { LocationCategory.valueOf(it.uppercase()) }
+    }
+
+    fun getCategoryImageRes(): Int {
+        return when (getLocationCategory()) {
+            LocationCategory.RESTAURANTS -> R.drawable.rest_bg
+            else -> R.drawable.list_master_bg
         }
     }
 

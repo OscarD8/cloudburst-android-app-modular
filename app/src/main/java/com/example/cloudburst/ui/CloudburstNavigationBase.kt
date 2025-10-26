@@ -1,6 +1,5 @@
 package com.example.cloudburst.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +26,6 @@ import com.example.ui.theme.shadowCustom
  * Notes:
  * At this point the hierarchy is:
  * Surface > Scaffold (possible NavBar, Background, TopAppBar). So now on to content.
- *
  */
 
 /**
@@ -49,6 +47,7 @@ import com.example.ui.theme.shadowCustom
 @Composable
 fun CloudburstNavigationBase(
     windowSize: WindowWidthSizeClass,
+    setTopBarTitle: (String) -> Unit,
     navController: NavHostController,
     navigationType: CloudburstNavigationType,
     contentType: CloudburstContentType,
@@ -63,7 +62,7 @@ fun CloudburstNavigationBase(
                     PermanentDrawerSheet (
                         drawerContainerColor = MaterialTheme.colorScheme.primaryContainer,
                         drawerShape = RightSideRoundedShape30,
-                        modifier = modifier
+                        modifier = Modifier
                     ) {
                         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.navdrawer_spacer_height)))
                         CloudburstNavigationDrawerContent(
@@ -77,11 +76,16 @@ fun CloudburstNavigationBase(
                     .width(dimensionResource(R.dimen.drawer_width))
                     .shadowCustom(
                         offsetY = dimensionResource(R.dimen.shadow_offset_negative_y),
-                        blurRadius = dimensionResource(R.dimen.shadow_blur_radius),
+                        blurRadius = dimensionResource(R.dimen.shadow_radius_standard),
                         shapeRadius = dimensionResource(R.dimen.shadow_shape_radius),
                     )
             ) {
-                CloudburstNavHost(navController, windowSize, modifier = Modifier.fillMaxSize())
+                CloudburstNavHost(
+                    setTopBarTitle = setTopBarTitle,
+                    navController = navController,
+                    windowSize = windowSize,
+                    modifier = modifier // ?
+                )
             }
         }
         CloudburstNavigationType.NAVIGATION_RAIL -> {
@@ -94,12 +98,22 @@ fun CloudburstNavigationBase(
                 Column(
                     modifier = Modifier.weight(1f),
                 ) {
-                    CloudburstNavHost(navController, windowSize, modifier = Modifier.fillMaxSize())
+                    CloudburstNavHost(
+                        setTopBarTitle = setTopBarTitle,
+                        navController = navController,
+                        windowSize = windowSize,
+                        modifier = modifier // ?
+                    )
                 }
             }
         }
         else -> {
-            CloudburstNavHost(navController, windowSize, modifier)
+            CloudburstNavHost(
+                setTopBarTitle = setTopBarTitle,
+                navController = navController,
+                windowSize = windowSize,
+                modifier = modifier
+            )
         }
     }
 }

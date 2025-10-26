@@ -23,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,9 +50,15 @@ import com.example.ui.theme.shadowCustom
 
 @Composable
 fun CloudburstHomeScreen(
+    setTopBarTitle: (String) -> Unit,
     windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier
 ) {
+    val homeTitle = stringResource(R.string.home)
+    LaunchedEffect(Unit) {
+        setTopBarTitle(homeTitle)
+    }
+
     when (windowSize) {
         WindowWidthSizeClass.Compact -> {
             HomeScreenCompact(modifier = modifier)
@@ -75,6 +82,7 @@ internal fun HomeScreenCompact(
     // all self-contained here
     var isExpanded by remember { mutableStateOf(false) }
     val constraints = if (isExpanded) expandedConstraints else collapsedConstraints
+
 
     ConstraintLayout(
         constraintSet = constraints,
@@ -104,7 +112,7 @@ internal fun HomeScreenCompact(
                 .fillMaxWidth(0.9f)
                 .shadowCustom(
                     offsetY = dimensionResource(R.dimen.shadow_offset_y),
-                    blurRadius = dimensionResource(R.dimen.shadow_blur_radius),
+                    blurRadius = dimensionResource(R.dimen.shadow_radius_standard),
                     shapeRadius = dimensionResource(R.dimen.home_surface_textbox_shape),
                 )
         ) {

@@ -134,7 +134,7 @@ fun CloudburstNavBar(
         modifier = modifier
             .shadowCustom(
                 offsetY = dimensionResource(id = R.dimen.navbar_item_horizontal_padding),
-                blurRadius = dimensionResource(id = R.dimen.shadow_blur_radius),
+                blurRadius = dimensionResource(id = R.dimen.shadow_radius_standard),
                 shapeRadius = dimensionResource(id = R.dimen.shadow_shape_radius)
             )
             .clip(TopRoundedShape30)
@@ -153,7 +153,8 @@ fun CloudburstNavBar(
                     Text(
                         text = stringResource(navItem.labelRes),
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 },
                 colors = NavigationBarItemDefaults.colors().copy(

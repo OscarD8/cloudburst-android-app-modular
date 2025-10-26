@@ -12,11 +12,16 @@ import androidx.navigation.navArgument
 import com.example.core.navigation.Screen
 import com.example.ui.categories.CategoriesScreen
 import com.example.ui.home.CloudburstHomeScreen
+import com.example.ui.locations.list.LocationsListScreen
 
+/**
+ * Defines the routes for navigation.
+ */
 @Composable
 fun CloudburstNavHost(
     navController: NavHostController,
     windowSize: WindowWidthSizeClass,
+    setTopBarTitle: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -25,13 +30,18 @@ fun CloudburstNavHost(
         modifier = modifier
     ) {
         composable(Screen.Home.route) {
-            CloudburstHomeScreen(windowSize, modifier = Modifier.fillMaxSize())
+            CloudburstHomeScreen(
+                setTopBarTitle = setTopBarTitle,
+                windowSize,
+                modifier = Modifier.fillMaxSize()
+            )
         }
 
         composable(Screen.Categories.route) {
             CategoriesScreen(
                 windowSize = windowSize,
-                onCategorySelected = { category -> // list item for category passes that NavItem's route up
+                setTopBarTitle = setTopBarTitle,
+                onCategorySelected = { category ->
                     navController.navigate(Screen.LocationsList.createRoute(category.name)) // route passed in to make URL by category
                 },
                 modifier = Modifier.fillMaxSize()
@@ -49,13 +59,14 @@ fun CloudburstNavHost(
         ) {
             // LocationsListScreen's viewmodel will use the "category" argument
             // from the route to fetch the correct data
-//            LocationsListScreen(
-//                windowSize = windowSize,
-//                onLocationClicked = { locationId ->
-//                    navController.navigate(Screen.LocationDetail.createRoute(locationId))
-//                },
-//                onClickToExpand = {}
-//            )
+            LocationsListScreen(
+                setTopBarTitle = setTopBarTitle,
+                windowSize = windowSize,
+                onExploreClicked = { locationId ->
+                    navController.navigate(Screen.LocationDetail.createRoute(locationId))
+                },
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }
