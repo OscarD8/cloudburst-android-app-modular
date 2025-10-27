@@ -34,4 +34,10 @@
     <string name="list_location_rating_desc">Rating: %d</string>
     <string name="list_location_carbon_desc">Performs Carbon Capture: %b</string>
 
+
+    <!-- Error -->
+    <string name="error_location_not_found">Error. Unable to retrieve location.</string>
+    <string name="error_invalid_category">Error fetching selected category.</string>
+
+
 </resources>

@@ -1,5 +1,6 @@
 package com.example.ui.locations.list
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import com.example.ui.common.ListScreenUiState
 import com.example.ui.common.LocationMapper
 import com.example.ui.locations.LocationUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,23 +35,16 @@ class LocationsListViewModel @Inject constructor(
     private val locationMapper: LocationMapper,
     private val savedStateHandle: SavedStateHandle // bridging navigation arguments to the viewmodel lifecycle
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(ListScreenUiState<LocationUiModel>())
     val uiState: StateFlow<ListScreenUiState<LocationUiModel>> = _uiState.asStateFlow()
-    val categoryName: String? = savedStateHandle["category"]
+
+    val categoryName: String = checkNotNull(savedStateHandle["category"])
+    private val locationCategory: LocationCategory = enumValueOf<LocationCategory>(categoryName)
+
 
     init {
-        Log.d("LocationsListViewModel", "Category name: $categoryName")
-
-        if (categoryName != null) {
-            try {
-                val category = LocationCategory.valueOf(categoryName.uppercase())
-                loadLocations(category)
-            } catch (e: IllegalArgumentException) {
-                _uiState.value = ListScreenUiState(error = "Invalid category specified.")
-            }
-        } else {
-            _uiState.value = ListScreenUiState(error = "Unable to load category.")
-        }
+        loadLocations(locationCategory)
     }
 
     /*
@@ -57,6 +52,8 @@ class LocationsListViewModel @Inject constructor(
      */
     private fun loadLocations(category: LocationCategory) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
             val locationsFromDomain = getLocationsByCategoryUseCase.invoke(category)
 
             val locationsForUi = locationsFromDomain.map { location ->
@@ -72,12 +69,8 @@ class LocationsListViewModel @Inject constructor(
         }
     }
 
-    fun getLocationCategory(): LocationCategory? {
-        return categoryName?.let { LocationCategory.valueOf(it.uppercase()) }
-    }
-
     fun getCategoryImageRes(): Int {
-        return when (getLocationCategory()) {
+        return when (locationCategory) {
             LocationCategory.RESTAURANTS -> R.drawable.rest_bg
             else -> R.drawable.list_master_bg
         }
