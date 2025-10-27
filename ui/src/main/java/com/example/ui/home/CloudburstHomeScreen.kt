@@ -43,6 +43,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.layoutId
 import com.example.ui.R
+import com.example.ui.common.ExploreButton
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.FullRoundedShape30
 import com.example.ui.theme.shadowCustom
@@ -144,31 +145,7 @@ internal fun HomeScreenCompact(
                     )
                 }
 
-                Button(
-                    onClick = {}, //TODO
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outline),
-                    elevation = ButtonDefaults.buttonElevation(dimensionResource(R.dimen.button_standard_elevation))
-                ) {
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.atr_icon),
-                            contentDescription = stringResource(R.string.explore_button),
-                            tint = MaterialTheme.colorScheme.inverseOnSurface
-                        )
-                        Text(
-                            text = stringResource(R.string.explore_button),
-                            style = MaterialTheme.typography.headlineMedium,
-                            color = MaterialTheme.colorScheme.inverseOnSurface,
-                            modifier = Modifier.padding(
-                                start = dimensionResource(R.dimen.button_text_start_padding),
-                                bottom = dimensionResource(R.dimen.button_text_bottom_padding)
-                            )
-                        )
-                    }
-                }
+                ExploreButton(onClick = {})
             }
         }
     }

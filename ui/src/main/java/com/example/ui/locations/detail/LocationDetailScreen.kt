@@ -14,3 +14,6 @@ data class LocationDetailScreen(
     @DrawableRes val imageId: Int
 )
 
+fun LocationDetailScreen() {
+
+}

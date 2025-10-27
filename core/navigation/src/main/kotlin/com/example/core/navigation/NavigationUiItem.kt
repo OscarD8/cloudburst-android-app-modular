@@ -27,7 +27,7 @@ data class NavigationItem(
 private val allNavigationItems = listOf(
     NavigationItem(
         route = Screen.Home.route,
-        icon = R.drawable.ic_home,
+        icon = R.drawable.ic_home, // could've used image vectors?
         locationCategory = null,
         labelRes = R.string.home_header
     ),
@@ -39,7 +39,7 @@ private val allNavigationItems = listOf(
     ),
     NavigationItem(
         route = Screen.Favourites.route,
-        icon = R.drawable.ic_favourites,
+        icon = R.drawable.ic_bookmarks,
         locationCategory = null,
         labelRes = R.string.favourites_header
     ),

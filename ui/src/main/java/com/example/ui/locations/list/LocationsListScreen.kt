@@ -1,7 +1,9 @@
 package com.example.ui.locations.list
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.Spring.DampingRatioLowBouncy
@@ -9,8 +11,10 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +22,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,9 +31,24 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Beenhere
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkAdd
+import androidx.compose.material.icons.filled.BookmarkAdded
+import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Brightness5
+import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Beenhere
+import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.BookmarkAdd
+import androidx.compose.material.icons.outlined.HeartBroken
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,19 +64,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.innerShadow
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.domain.model.LocationCategory
 import com.example.ui.R
+import com.example.ui.common.ExploreButton
 import com.example.ui.common.backgroundCropPresets
 import com.example.ui.locations.LocationUiModel
 import com.example.ui.theme.CloudburstTheme
@@ -89,7 +112,8 @@ fun LocationsListScreen(
             LocationsListScreenCompact(
                 locationsList = uiState.items,
                 onExploreClicked = {},
-                onClickToExpand = {},
+                onClickToExpand = { viewModel.toggleLocationItemExpanded(it)},
+                onClickToFavourite = { viewModel.toggleLocationItemFavourite(it) },
                 itemBackgroundRes = viewModel.getCategoryImageRes(),
                 modifier = modifier
             )
@@ -113,6 +137,7 @@ private fun LocationsListScreenCompact(
     onExploreClicked: (Long) -> Unit,
     locationsList: List<LocationUiModel>,
     onClickToExpand: (Long) -> Unit,
+    onClickToFavourite: (Long) -> Unit,
     @DrawableRes itemBackgroundRes: Int,
     modifier: Modifier = Modifier
 ) {
@@ -128,8 +153,8 @@ private fun LocationsListScreenCompact(
     }
 
     LazyColumn (
-        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_large)),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large)),
+        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
@@ -144,13 +169,17 @@ private fun LocationsListScreenCompact(
                 modifier = modifier
             ) {
                 LocationListItem(
-                    onExploreClicked = {onExploreClicked(location.id)},
-                    onClickToExpand = {onClickToExpand(location.id)},
-                    isExpanded = location.isExpanded,
+                    onExploreClicked = { onExploreClicked(location.id) },
+                    onClickToExpand = { onClickToExpand(location.id) },
+                    onClickToFavourite = { onClickToFavourite(location.id) },
                     cropAlignment = backgroundCropPresets[index % backgroundCropPresets.size], // align image by sequence of crop presets
                     locationName = location.name,
                     locationAddress = location.address,
                     itemBackgroundRes = itemBackgroundRes,
+                    isExpanded = location.isExpanded,
+                    isFavourite = location.isFavourite,
+                    isCarbonCapture = location.isCarbonCapturing,
+                    rating = location.rating,
                     modifier = Modifier
                         .width(dimensionResource(R.dimen.list_item_width))
                         .height(dimensionResource(R.dimen.list_item_height))
@@ -190,118 +219,224 @@ private fun LocationListItem(
     onExploreClicked: (Long) -> Unit,
     cropAlignment: Alignment,
     onClickToExpand: () -> Unit,
+    onClickToFavourite: () -> Unit,
+    rating: Int,
+    isCarbonCapture: Boolean,
     isExpanded: Boolean,
+    isFavourite: Boolean,
     modifier: Modifier = Modifier,
     @DrawableRes itemBackgroundRes: Int = R.drawable.list_master_bg,
 ) {
-    Card (
-        shape = ListItemShape,
-        modifier = modifier
-            .dropShadow(ListItemShape, shadow = Shadow(
-                radius = dimensionResource(R.dimen.shadow_radius_standard),
-                spread = dimensionResource(R.dimen.shadow_spread_standard),
-                color = Color.Gray,
-                offset = DpOffset(x = 0.dp, dimensionResource(R.dimen.shadow_offset_y))
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessMedium
                 )
             )
+            .padding(dimensionResource(R.dimen.padding_medium))
     ) {
-        Box {
-            Image(
-                painter = painterResource(itemBackgroundRes),
-                contentScale = ContentScale.Crop,
-                alignment = cropAlignment,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize()
-            )
+        Card(
+            shape = ListItemShape,
+            modifier = modifier
+                .dropShadow(ListItemShape, shadow = Shadow(
+                    radius = dimensionResource(R.dimen.shadow_radius_standard),
+                    spread = dimensionResource(R.dimen.shadow_spread_standard),
+                    color = Color.Gray,
+                    offset = DpOffset(x = 0.dp, dimensionResource(R.dimen.shadow_offset_y))
+                    )
+                )
+                .zIndex(1f)
+        ) {
+            Box {
+                Image(
+                    painter = painterResource(itemBackgroundRes),
+                    contentScale = ContentScale.Crop,
+                    alignment = cropAlignment,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
 
-            Row( // wrapping internal card content
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        start = dimensionResource(R.dimen.padding_xlarge),
-                        end = dimensionResource(R.dimen.padding_xlarge),
-                        top = dimensionResource(R.dimen.padding_xlarge)
-                    )
-            ) {
-                Column ( // container for internal text
-                    verticalArrangement = Arrangement.SpaceAround,
+                Row( // wrapping internal card content
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .size(
-                            width = dimensionResource(R.dimen.list_item_internal_textbox_width),
-                            height = dimensionResource(R.dimen.list_item_internal_textbox_height)
-                        )
-                        .clip(ListItemInternalText)
-                        .background(color = MaterialTheme.colorScheme.inverseOnSurface)
-                        .innerShadow(
-                            shape = ListItemInternalText,
-                            shadow = Shadow(
-                                radius = dimensionResource(R.dimen.shadow_radius_standard),
-                                spread = dimensionResource(R.dimen.shadow_spread_standard),
-                                color = Color.Gray,
-                                offset = DpOffset(x = 0.dp, dimensionResource(R.dimen.shadow_offset_y))
-                            )
-                        )
+                        .fillMaxSize()
                         .padding(
-                            vertical = dimensionResource(R.dimen.padding_large),
-                            horizontal = dimensionResource(R.dimen.padding_large)
+                            start = dimensionResource(R.dimen.padding_xlarge),
+                            end = dimensionResource(R.dimen.padding_xlarge),
+                            top = dimensionResource(R.dimen.padding_xlarge)
                         )
                 ) {
-                    Text(
-                        text = locationName,
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = locationAddress,
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(dimensionResource(R.dimen.list_item_expand_box))
-                        .background(color = MaterialTheme.colorScheme.onSurface)
-                        .shadowCustom(
-                            blurRadius = dimensionResource(R.dimen.shadow_radius_standard),
-                            shapeRadius = dimensionResource(R.dimen.shadow_inner_circle),
-                            color = MaterialTheme.colorScheme.inverseOnSurface
-                        )
-                ) {
-                    IconButton (
-                        onClick = { onClickToExpand() },
-                        modifier = Modifier.fillMaxSize()
+                    // container for internal text
+                    Column(
+                        verticalArrangement = Arrangement.SpaceAround,
+                        modifier = Modifier
+                            .size(
+                                width = dimensionResource(R.dimen.list_item_internal_textbox_width),
+                                height = dimensionResource(R.dimen.list_item_internal_textbox_height)
+                            )
+                            .clip(ListItemInternalText)
+                            .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+                            .innerShadow(
+                                shape = ListItemInternalText,
+                                shadow = Shadow(
+                                    radius = dimensionResource(R.dimen.shadow_radius_standard),
+                                    spread = dimensionResource(R.dimen.shadow_spread_standard),
+                                    color = Color.Gray,
+                                    offset = DpOffset(
+                                        x = 0.dp,
+                                        0.dp
+                                    )
+                                )
+                            )
+                            .padding(
+                                vertical = dimensionResource(R.dimen.padding_large),
+                                horizontal = dimensionResource(R.dimen.padding_large)
+                            )
                     ) {
-                        Icon(
-                            imageVector = if (!isExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowDown,
-                            contentDescription = stringResource(R.string.category_arrow_content_desc, locationName),
+                        Text(
+                            text = locationName,
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = locationAddress,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(dimensionResource(R.dimen.list_item_expand_box))
+                            .background(MaterialTheme.colorScheme.inverseOnSurface)
+                            .innerShadow(
+                                shape = ListItemInternalText,
+                                shadow = Shadow(
+                                    radius = dimensionResource(R.dimen.shadow_radius_standard),
+                                    spread = dimensionResource(R.dimen.shadow_spread_standard),
+                                    color = Color.Gray,
+                                    offset = DpOffset(
+                                        x = 0.dp,
+                                        0.dp
+                                    )
+                                )
+                            )
+                    ) {
+                        IconButton(
+                            onClick = { onClickToExpand() },
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Icon(
+                                imageVector = if (!isExpanded) Icons.Filled.ArrowDropDown else Icons.Filled.ArrowDropUp,
+                                contentDescription = stringResource(
+                                    R.string.category_arrow_content_desc,
+                                    locationName
+                                ),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        if (isExpanded) {
+            Column(
+                modifier = Modifier
+                    .height(dimensionResource(R.dimen.list_item_expanded_height))
+                    .width(dimensionResource(R.dimen.list_item_expanded_width))
+                    .clip(ExpandedListItemShape)
+                    .background(MaterialTheme.colorScheme.inverseOnSurface)
+                    .border(
+                        border = BorderStroke(
+                            width = dimensionResource(R.dimen.list_item_expand_box_border),
+                            color = MaterialTheme.colorScheme.outlineVariant
+                        ),
+                        shape = ExpandedListItemShape
+                    )
+            ) {
+                Column (
+                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_large))
+                ) {
+                    // Rating and bookmark
+                    Row (
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row (verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = stringResource(R.string.expanded_item_rating),
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_small))
+                            )
+                            repeat(5) {
+                                Icon(
+                                    imageVector = if (it < rating) Icons.Filled.Brightness7 else Icons.Default.Brightness5,
+                                    contentDescription = stringResource(R.string.list_location_rating_desc, rating),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(dimensionResource(R.dimen.list_item_rating_icon_size))
+                                )
+                            }
+                        }
+                        IconButton(
+                            onClick = onClickToFavourite
+                        ) {
+                            Icon(
+                                imageVector = if (!isFavourite) Icons.Outlined.BookmarkAdd else Icons.Default.BookmarkAdded,
+                                contentDescription = stringResource(R.string.expanded_item_favourite_icon_desc),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+
+                        }
+                    }
+                    // Carbon Capture
+                    Row (verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.expanded_item_carbon_capture),
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Icon(
+                            imageVector = if (isCarbonCapture) Icons.Filled.Beenhere else Icons.Outlined.HeartBroken,
+                            contentDescription = stringResource(R.string.list_location_carbon_desc, isCarbonCapture),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier
+                                .size(dimensionResource(R.dimen.list_item_carbon_item_size))
+                                .padding(start = dimensionResource(R.dimen.padding_small))
+                        )
+                    }
+                   Row (
+                       horizontalArrangement = Arrangement.Center,
+                       modifier = Modifier.fillMaxWidth()
+                   ) {
+                       ExploreButton(
+                           onClick = {},
+                           modifier = Modifier
+                               .padding(top = dimensionResource(R.dimen.padding_medium)),
+                           textStyle = MaterialTheme.typography.labelLarge.copy(
+                               fontWeight = FontWeight.Bold
+                           ),
+                           iconSize = 20.dp
+                       )
+                   }
                 }
             }
         }
     }
 }
-
-@Composable
-private fun ListItemExpandedCard(
-    rating: Int,
-    isCarbonCapture: Boolean,
-    modifier: Modifier = Modifier
-) {
-    Card (
-        shape = ExpandedListItemShape,
-        modifier = modifier
-            .width(dimensionResource(R.dimen.list_item_expanded_width))
-            .height(dimensionResource(R.dimen.list_item_expanded_height)),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.inverseOnSurface)
-    ) {
-
-    }
-}
-
 
 
 @Preview (showBackground = true)
@@ -313,9 +448,13 @@ private fun PreviewLocationListItem() {
             locationAddress = "Volcanoes",
             onExploreClicked = {},
             onClickToExpand = {},
-            isExpanded = false,
+            onClickToFavourite = {},
+            isExpanded = true,
+            isFavourite = false,
             cropAlignment = Alignment.Center,
             itemBackgroundRes = R.drawable.list_master_bg,
+            rating = 2,
+            isCarbonCapture = true,
             modifier = Modifier
                 .width(dimensionResource(R.dimen.list_item_width))
                 .height(dimensionResource(R.dimen.list_item_height))

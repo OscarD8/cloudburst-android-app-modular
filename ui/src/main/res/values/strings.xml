@@ -27,4 +27,11 @@
     <!-- Categories Screen -->
     <string name="category_arrow_content_desc">Navigate to %s</string>
 
+    <!-- LocationList Screen -->
+    <string name="expanded_item_rating">Rating:</string>
+    <string name="expanded_item_carbon_capture">Carbon Capture:</string>
+    <string name="expanded_item_favourite_icon_desc">Click to toggle item as a favourite.</string>
+    <string name="list_location_rating_desc">Rating: %d</string>
+    <string name="list_location_carbon_desc">Performs Carbon Capture: %b</string>
+
 </resources>

@@ -31,9 +31,9 @@
     <!-- Shadow -->
     <dimen name="shadow_offset_y">2.dp</dimen>
     <dimen name="shadow_offset_negative_y">-2.dp</dimen>
-    <dimen name="shadow_radius_standard">8.dp</dimen>
+    <dimen name="shadow_radius_standard">4.dp</dimen>
     <dimen name="shadow_shape_radius">30.dp</dimen>
-    <dimen name="shadow_spread_standard">4.dp</dimen>
+    <dimen name="shadow_spread_standard">2.dp</dimen>
     <dimen name="shadow_inner_circle">50.dp</dimen>
 
     <!-- Component Shape Variants -->
@@ -48,12 +48,16 @@
     <dimen name="list_item_internal_textbox_width_cat">146.dp</dimen>
     <dimen name="list_item_internal_textbox_height_cat">60.dp</dimen>
     <dimen name="list_item_internal_textbox_width">203.dp</dimen>
-    <dimen name="list_item_internal_textbox_height">78.dp</dimen>
-    <dimen name="list_item_width">363.dp</dimen>
-    <dimen name="list_item_height">153.dp</dimen>
+    <dimen name="list_item_internal_textbox_height">86.dp</dimen>
+    <dimen name="list_item_width">335.dp</dimen>
+    <dimen name="list_item_height">163.dp</dimen>
     <dimen name="list_item_next_arrow_box">60.dp</dimen>
-    <dimen name="list_item_expanded_width">283.dp</dimen>
-    <dimen name="list_item_expanded_height">149.dp</dimen>
+    <dimen name="list_item_expanded_width">263.dp</dimen>
+    <dimen name="list_item_expanded_height">139.dp</dimen>
     <dimen name="list_item_internal_text_shape">50.dp</dimen>
     <dimen name="list_item_expand_box">50.dp</dimen>
+    <dimen name="list_item_rating_icon_size">20.dp</dimen>
+    <dimen name="list_item_expand_box_border">2.dp</dimen>
+    <dimen name="list_item_carbon_item_size">24.dp</dimen>
+
 </resources>

@@ -22,6 +22,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -137,7 +140,7 @@ private fun CategoriesScreenCompact (
 
 
     LazyColumn(
-        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
+        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_large)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large)),
         modifier = modifier
@@ -259,7 +262,10 @@ private fun CategoryListItem(
                                 radius = dimensionResource(R.dimen.shadow_radius_standard),
                                 spread = dimensionResource(R.dimen.shadow_spread_standard),
                                 color = Color.Gray,
-                                offset = DpOffset(x = 0.dp, dimensionResource(R.dimen.shadow_offset_y))
+                                offset = DpOffset(
+                                    x = 0.dp,
+                                    0.dp
+                                )
                             )
                         )
                 ) {
@@ -277,11 +283,18 @@ private fun CategoryListItem(
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(dimensionResource(R.dimen.list_item_next_arrow_box))
-                        .background(color = MaterialTheme.colorScheme.onSurface)
-                        .shadowCustom(
-                            blurRadius = dimensionResource(R.dimen.shadow_radius_standard),
-                            shapeRadius = dimensionResource(R.dimen.list_item_internal_text_shape),
-                            color = MaterialTheme.colorScheme.inverseOnSurface
+                        .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+                        .innerShadow(
+                            shape = ListItemInternalText,
+                            shadow = Shadow(
+                                radius = dimensionResource(R.dimen.shadow_radius_standard),
+                                spread = dimensionResource(R.dimen.shadow_spread_standard),
+                                color = Color.Gray,
+                                offset = DpOffset(
+                                    x = 0.dp,
+                                    0.dp
+                                )
+                            )
                         )
                 ) {
                     IconButton (
@@ -289,7 +302,7 @@ private fun CategoryListItem(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Icon(
-                            imageVector = Icons.Default.KeyboardDoubleArrowRight,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowRight,
                             contentDescription = stringResource(R.string.category_arrow_content_desc, category),
                         )
                     }

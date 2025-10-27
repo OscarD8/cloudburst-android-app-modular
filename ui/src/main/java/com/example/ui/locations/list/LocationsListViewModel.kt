@@ -96,4 +96,18 @@ class LocationsListViewModel @Inject constructor(
         }
     }
 
+    fun toggleLocationItemFavourite(itemId: Long) {
+        Log.d("LocationsListViewModel", "toggleLocationItemFavourite: $itemId")
+        _uiState.update { currentState ->
+            val updatedItems = currentState.items.map { item ->
+                if (item.id == itemId) {
+                    item.copy(isFavourite = !item.isFavourite)
+                } else {
+                    item
+                }
+            }
+            currentState.copy(items = updatedItems)
+        }
+    }
+
 }
