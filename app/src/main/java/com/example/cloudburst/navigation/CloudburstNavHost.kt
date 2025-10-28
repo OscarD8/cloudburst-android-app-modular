@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.example.core.navigation.Screen
 import com.example.ui.categories.CategoriesScreen
 import com.example.ui.home.CloudburstHomeScreen
+import com.example.ui.locations.detail.LocationDetailRoute
 import com.example.ui.locations.list.LocationsListScreen
 
 /**
@@ -66,6 +67,21 @@ fun CloudburstNavHost(
                     navController.navigate(Screen.LocationDetail.createRoute(locationId))
                 },
                 modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        composable(
+            route = Screen.LocationDetail.route,
+            arguments = listOf(
+                navArgument("locationId") {
+                    type = NavType.LongType
+                }
+            )
+        ) {
+            LocationDetailRoute(
+                windowSize = windowSize,
+                setTopBarTitle = setTopBarTitle,
+                modifier = modifier
             )
         }
     }

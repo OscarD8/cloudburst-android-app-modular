@@ -42,8 +42,13 @@ class LocationDetailViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
 
             val location = getLocationByIdUseCase(id)
-            val locationUiModel = locationMapper.toUiModel(location)
-            _uiState.update { it.copy(isLoading = false, location = locationUiModel) }
+
+            if (location != null) {
+                val locationUiModel = locationMapper.toUiModel(location)
+                _uiState.update { it.copy(isLoading = false, location = locationUiModel) }
+            } else {
+                _uiState.update { it.copy(isLoading = false, error = R.string.error_location_not_found) }
+            }
         }
     }
 

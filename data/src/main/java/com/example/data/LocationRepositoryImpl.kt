@@ -20,9 +20,12 @@ class LocationRepositoryImpl @Inject constructor(
         return mapLocationsListToDomainModels(locations)
     }
 
-    override suspend fun getLocationById(id: Long): Location {
+    override suspend fun getLocationById(id: Long): Location? {
         val locationDataEntry = FakeApiService.getLocationById(id)
-        return mapLocationToDomainModel(locationDataEntry)
+
+        return locationDataEntry?.let { dataEntry -> // Single expression that handles the null check and non-null transformation
+            mapLocationToDomainModel(dataEntry)
+        }
     }
 
     override suspend fun getCategories(): List<LocationCategory> {

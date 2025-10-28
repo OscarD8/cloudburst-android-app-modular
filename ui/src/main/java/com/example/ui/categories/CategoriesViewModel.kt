@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Location
 import com.example.domain.model.LocationCategory
 import com.example.domain.usecase.GetCategoriesUseCase
-import com.example.ui.common.ListScreenUiState
+import com.example.ui.locations.list.ListScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -138,7 +138,7 @@ object FakeApiService {
         }
     }
 
-    internal fun getLocationById(locationId: Long): LocationDataEntry {
-        return allLocations.first() {it.id == locationId}
+    internal fun getLocationById(locationId: Long): LocationDataEntry? {
+        return allLocations.firstOrNull() {it.id == locationId}
     }
 }

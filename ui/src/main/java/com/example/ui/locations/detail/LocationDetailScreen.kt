@@ -5,13 +5,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BookmarkAdded
+import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -21,18 +29,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.domain.model.LocationCategory
 import com.example.ui.R
+import com.example.ui.common.components.CarbonRatingRow
+import com.example.ui.common.components.FavouriteIconButton
+import com.example.ui.common.components.RatingRow
 import com.example.ui.locations.LocationUiModel
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.DetailComponentShape
+import com.example.ui.theme.ListItemInternalText
+import com.example.ui.theme.presetContainerShading
 
 /**
  * Location detail screen accessed when a user clicks on a location in the list.
@@ -42,76 +60,91 @@ import com.example.ui.theme.DetailComponentShape
 fun LocationDetailRoute(
     windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
+    setTopBarTitle: (String) -> Unit,
     viewModel: LocationDetailViewModel = hiltViewModel()
 ) {
     val uiState: LocationDetailUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LocationDetailStateWrapper(
-        isLoading = uiState.isLoading,
-        location = uiState.location,
-        error = uiState.error,
+        uiState = uiState,
         onFavouriteClick = { viewModel.toggleLocationFavourite() },
         windowSize = windowSize,
         modifier = modifier
     )
 }
 
+/*
+ * Notes on why the Wrapper is needed:
+ * The Check: The Head Chef leans in and asks the busy Sous Chef (the by delegate), "Is that meal cooked?" (uiState.location != null)
+ *
+ * The Sous Chef: "Yep, looks cooked to me!"
+ *
+ * The Problem: The Head Chef then turns to the waiter and says, "Go grab that meal from the Sous Chef." (location = uiState.location)
+ *
+ * The Compiler's Panic: The Head Chef (compiler) immediately stops the waiter,
+ * "Whoa, hold on! By the time you get to the Sous Chef, he might have been handed a new order
+ * (a new state emission) and started a new, uncooked meal. The meal you grab might not be the same one I just checked.
+ * I cannot guarantee it. I won't allow this."
+ *
+ * Basically the chef of uiState is using property delegation of a StateFlow that may represent
+ * two different objects in-between the null assertion check and the passing of that same
+ * state property to the Screen Composable. It seems at runtime this is not actually a problem
+ * because the StateFlow has been captured once per composable execution, but the compiler
+ * sees property delegation as unstable?
+ */
+
 /**
  * Wrapper for the location detail screen to handle state changes of the detail screen loading.
- * If the screen is currently loading, a circular progress indicator is displayed.
- * If the screen is in an error state, an error message is displayed.
- * If the screen is in a success state, the location detail screen for the window size is called.
  *
- * @param isLoading Whether the screen is currently loading.
- * @param location The location to display.
- * @param error The error message to display.
+ *
+ * @param uiState The current state of the detail screen.
+ * @param windowSize The current window size.
+ * @param onFavouriteClick The callback to invoke when the favourite button is clicked.
  */
 @Composable
 private fun LocationDetailStateWrapper(
-    isLoading: Boolean,
-    location: LocationUiModel?,
-    error: String?,
+    uiState: LocationDetailUiState,
     windowSize: WindowWidthSizeClass,
     onFavouriteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     when {
-        isLoading -> {
+        uiState.isLoading -> {
             Box(modifier = modifier.wrapContentSize(Alignment.Center)) {
                 CircularProgressIndicator()
             }
         }
-        error != null -> {
+        uiState.error != null -> {
             Box(modifier = modifier.wrapContentSize(Alignment.Center)) {
-                Text(stringResource(R.string.error_location_not_found))
+                Text(stringResource(uiState.error))
             }
         }
-        location != null -> {
+        uiState.location != null -> {
             when (windowSize) {
                 WindowWidthSizeClass.Compact -> {
                     LocationDetailScreenCompact(
-                        location = location,
+                        location = uiState.location,
                         onFavouriteClick = onFavouriteClick,
                         modifier = modifier
                     )
                 }
                 WindowWidthSizeClass.Medium -> {
                     LocationDetailScreenMedium(
-                        location = location,
+                        location = uiState.location,
                         onFavouriteClick = onFavouriteClick,
                         modifier = modifier
                     )
                 }
                 WindowWidthSizeClass.Expanded -> {
                     LocationDetailScreenExpanded(
-                        location = location,
+                        location = uiState.location,
                         onFavouriteClick = onFavouriteClick,
                         modifier = modifier
                     )
                 }
                 else -> {
                     LocationDetailScreenCompact(
-                        location = location,
+                        location = uiState.location,
                         onFavouriteClick = onFavouriteClick,
                         modifier = modifier
                     )
@@ -139,33 +172,113 @@ private fun LocationDetailScreenCompact(
     onFavouriteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.SpaceAround,
-        horizontalAlignment = Alignment.CenterHorizontally
+
+    ConstraintLayout(
+        constraintSet = locationDetailConstraintSet,
+        modifier = modifier
     ) {
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            FavouriteIconButton(location, onFavouriteClick)
+        }
+
         Card(
             shape = DetailComponentShape,
             modifier = Modifier
                 .width(dimensionResource(R.dimen.detail_screen_card_width))
                 .height(dimensionResource(R.dimen.detail_screen_card_height))
+                .layoutId("card")
+                .zIndex(1f)
         ) {
-            Image(
-                painter = painterResource(location.imageIdentifier),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Box{
+                    Image(
+                        painter = painterResource(location.imageIdentifier),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                Box(
+                    modifier = Modifier.padding(
+                        bottom = dimensionResource(R.dimen.padding_xxl),
+                        end = dimensionResource(R.dimen.padding_xxl)
+                    )
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .width(dimensionResource(R.dimen.detail_card_textbox_width))
+                            .height(dimensionResource(R.dimen.detail_card_textbox_height))
+                            .clip(ListItemInternalText)
+                            .presetContainerShading(DetailComponentShape)
+                            .padding(dimensionResource(R.dimen.padding_large))
+
+                    ) {
+                        Text(
+                            text = location.name,
+                            style = MaterialTheme.typography.displaySmall
+
+                        )
+                        Text(
+                            text = location.address,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
         }
+
         Column (
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .height(dimensionResource(R.dimen.detail_screen_info_height))
                 .width(dimensionResource(R.dimen.detail_screen_info_width))
                 .clip(DetailComponentShape)
                 .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(dimensionResource(R.dimen.padding_xlarge))
+                .layoutId("column")
         ) {
-
+            Text(
+                text = location.description,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_xlarge))
+            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                RatingRow(location)
+                CarbonRatingRow(location)
+            }
         }
+    }
+}
+
+private val locationDetailConstraintSet = ConstraintSet {
+    val cardRef = createRefFor("card")
+    val columnRef = createRefFor("column")
+
+    constrain(cardRef) {
+        start.linkTo(parent.start)
+        end.linkTo(parent.end)
+        top.linkTo(parent.top)
+        bottom.linkTo(parent.bottom)
+        verticalBias = 0.25f
+    }
+
+    constrain(columnRef) {
+        top.linkTo(cardRef.top, margin = 160.dp)
+        start.linkTo(parent.start)
+        end.linkTo(parent.end)
     }
 }
 

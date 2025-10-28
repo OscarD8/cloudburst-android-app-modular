@@ -1,6 +1,5 @@
 package com.example.core.navigation
 
-
 /*
     Notes:
     Mapping all possible navigation routes/paths into one file for maintainability and
@@ -37,7 +36,7 @@ sealed class Screen(val route: String) {
 
     /**
      * Creates the specific navigation route for the locations list screen
-     * by substituting the provided [category] name into the route template.
+     * by substituting the provided category name into the route template.
      *
      * @param category The name of the category to display (e.g., "CAFE", "RESTAURANT").
      * @return The fully formed route string (e.g., "locations/CAFE").
@@ -48,7 +47,7 @@ sealed class Screen(val route: String) {
 
     /**
      * Creates the specific navigation route for the location detail screen
-     * by substituting the provided [locationId] into the route template.
+     * by substituting the provided locationId into the route template.
      *
      * @param locationId The unique ID of the location to display.
      * @return The fully formed route string (e.g., "locationDetail/123").

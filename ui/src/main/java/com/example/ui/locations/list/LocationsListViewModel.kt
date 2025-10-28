@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.LocationCategory
 import com.example.domain.usecase.GetLocationsByCategoryUseCase
 import com.example.ui.R
-import com.example.ui.common.ListScreenUiState
+import com.example.ui.locations.list.ListScreenUiState
 import com.example.ui.common.LocationMapper
 import com.example.ui.locations.LocationUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel

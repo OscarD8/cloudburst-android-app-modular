@@ -11,6 +11,6 @@ import com.example.ui.locations.LocationUiModel
 data class LocationDetailUiState (
     val location : LocationUiModel? = null,
     val isLoading: Boolean = false,
-    val error: String? = null,
+    val error: Int? = null,
 )
 

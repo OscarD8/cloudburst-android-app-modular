@@ -1,4 +1,4 @@
-package com.example.ui.common
+package com.example.ui.locations.list
 
 /**
  * UI state for the a screen displaying lists.
