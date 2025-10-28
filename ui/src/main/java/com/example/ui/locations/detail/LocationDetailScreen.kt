@@ -73,7 +73,7 @@ fun LocationDetailRoute(
 
     LocationDetailStateWrapper(
         uiState = uiState,
-        onFavouriteClick = { viewModel.toggleLocationFavourite() },
+        onFavouriteClick = { viewModel.toggleLocationFavourite(it) },
         windowSize = windowSize,
         modifier = modifier
     )
@@ -111,7 +111,7 @@ fun LocationDetailRoute(
 private fun LocationDetailStateWrapper(
     uiState: LocationDetailUiState,
     windowSize: WindowWidthSizeClass,
-    onFavouriteClick: () -> Unit,
+    onFavouriteClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when {
@@ -130,28 +130,28 @@ private fun LocationDetailStateWrapper(
                 WindowWidthSizeClass.Compact -> {
                     LocationDetailScreenCompact(
                         location = uiState.location,
-                        onFavouriteClick = onFavouriteClick,
+                        onFavouriteClick = { onFavouriteClick(uiState.location.id) },
                         modifier = modifier
                     )
                 }
                 WindowWidthSizeClass.Medium -> {
                     LocationDetailScreenMedium(
                         location = uiState.location,
-                        onFavouriteClick = onFavouriteClick,
+                        onFavouriteClick = { onFavouriteClick(uiState.location.id) },
                         modifier = modifier
                     )
                 }
                 WindowWidthSizeClass.Expanded -> {
                     LocationDetailScreenExpanded(
                         location = uiState.location,
-                        onFavouriteClick = onFavouriteClick,
+                        onFavouriteClick = { onFavouriteClick(uiState.location.id) },
                         modifier = modifier
                     )
                 }
                 else -> {
                     LocationDetailScreenCompact(
                         location = uiState.location,
-                        onFavouriteClick = onFavouriteClick,
+                        onFavouriteClick = { onFavouriteClick(uiState.location.id) },
                         modifier = modifier
                     )
                 }
@@ -189,7 +189,7 @@ private fun LocationDetailScreenCompact(
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_medium))
         ) {
-            FavouriteIconButton(location, onFavouriteClick)
+            FavouriteIconButton(location, onFavouriteClick )
         }
 
         Card(
@@ -293,7 +293,7 @@ private val locationDetailConstraintSet = ConstraintSet {
         end.linkTo(parent.end)
         top.linkTo(parent.top)
         bottom.linkTo(parent.bottom)
-        verticalBias = 0.2f
+        verticalBias = 0.15f
     }
 
     constrain(columnRef) {

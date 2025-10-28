@@ -183,7 +183,7 @@ private fun LocationsListScreenCompact(
                     location = location,
                     isExpanded = location.id in expandedIds,
                     onExploreClicked = { onExploreClicked(location.id) },
-                    onClickToExpand = onClickToExpand,
+                    onClickToExpand = { onClickToExpand(location.id) },
                     onClickToFavourite = { onClickToFavourite(location.id) },
                     cropAlignment = backgroundCropPresets[index % backgroundCropPresets.size], // align image by sequence of crop presets
                     itemBackgroundRes = itemBackgroundRes,
@@ -224,7 +224,7 @@ private fun LocationListItem(
     location: LocationUiModel,
     isExpanded: Boolean,
     onExploreClicked: () -> Unit,
-    onClickToExpand: (Long) -> Unit,
+    onClickToExpand: () -> Unit,
     onClickToFavourite: () -> Unit,
     cropAlignment: Alignment,
     modifier: Modifier = Modifier,
@@ -299,7 +299,7 @@ private fun LocationListItem(
                             .presetContainerShading(CircleShape)
                     ) {
                         IconButton(
-                            onClick = { onClickToExpand(location.id) },
+                            onClick = onClickToExpand,
                             modifier = Modifier.fillMaxSize()
                         ) {
                             Icon(

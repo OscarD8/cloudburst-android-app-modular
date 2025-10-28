@@ -476,12 +476,13 @@ internal object FakeApiService {
 
     // GOING TO ONE LIST AS ALL THE ABOVE FEELS MESSY
 
+    // Write Access
     // one mutableflow to rule them all
     private val _allLocations = MutableStateFlow(
         _allRestaurants + _allCafes + _allParks + _allTemples + _allPrinters
     )
 
-    // one flow
+    // Read Access
     val allLocations: Flow<List<LocationDataEntry>> = _allLocations.asStateFlow()
 
     /**
@@ -495,10 +496,22 @@ internal object FakeApiService {
          }
     }
 
-    fun getLocationById(locationId: Long): LocationDataEntry? {
-        return _allLocations.value.firstOrNull { it.id == locationId }
+    /**
+     * Get a location by its ID.
+     *
+     * @param locationId The ID of the location to retrieve.
+     */
+    fun getLocationStreamById(locationId: Long): Flow<LocationDataEntry?> {
+        return allLocations.map { locations ->
+            locations.firstOrNull { it.id == locationId }
+        }
     }
 
+    /**
+     * Toggle the favourite status of a location.
+     *
+     * @param locationId The ID of the location to toggle.
+     */
     fun toggleFavourite(locationId: Long) {
         _allLocations.update { list ->
             list.map { location ->

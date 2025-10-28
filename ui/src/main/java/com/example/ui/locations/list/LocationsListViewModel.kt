@@ -63,7 +63,6 @@ class LocationsListViewModel @Inject constructor(
     }
 
     fun toggleLocationItemFavourite(locationId: Long) {
-        Log.d("LocationsListViewModel", "toggleLocationItemFavourite: $locationId")
         viewModelScope.launch {
             toggleFavouriteUseCase.invoke(locationId)
         }

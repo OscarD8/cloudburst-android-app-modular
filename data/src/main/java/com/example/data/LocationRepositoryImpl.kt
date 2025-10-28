@@ -7,6 +7,7 @@ import com.example.domain.repository.LocationRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 
 class LocationRepositoryImpl @Inject constructor(
@@ -34,12 +35,11 @@ class LocationRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getLocationById(id: Long): Location? {
-        val locationDataEntry = FakeApiService.getLocationById(id)
-
-        return locationDataEntry?.let { dataEntry -> // Single expression that handles the null check and non-null transformation
-            mapLocationToDomainModel(dataEntry)
-        }
+    override fun getLocationById(id: Long): Flow<Location?> {
+        return FakeApiService.getLocationStreamById(id)
+            .map { dataEntry ->
+                dataEntry?.let { mapLocationToDomainModel(it) }
+            }
     }
 
     override suspend fun getCategories(): List<LocationCategory> {
