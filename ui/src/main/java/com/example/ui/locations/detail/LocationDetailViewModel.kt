@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetLocationByIdUseCase
+import com.example.domain.usecase.ToggleFavouriteUseCase
 import com.example.ui.R
 import com.example.ui.common.LocationMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class LocationDetailViewModel @Inject constructor(
     private val getLocationByIdUseCase: GetLocationByIdUseCase,
+    private val toggleFavouriteUseCase: ToggleFavouriteUseCase,
     private val locationMapper: LocationMapper,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -53,12 +55,6 @@ class LocationDetailViewModel @Inject constructor(
     }
 
     fun toggleLocationFavourite() {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    location = it.location?.copy(isFavourite = !it.location.isFavourite)
-                )
-            }
-        }
+        toggleFavouriteUseCase.invoke(locationId)
     }
 }

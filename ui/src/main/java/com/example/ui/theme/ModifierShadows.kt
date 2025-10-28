@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.innerShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
@@ -136,6 +137,18 @@ fun Modifier.presetContainerShading(shape: Shape): Modifier = this
                 x = 0.dp,
                 y = 0.dp // I fixed a small typo here, it was missing the 'y ='
             )
+        )
+    )
+
+@Composable
+fun Modifier.presetDropShadow(shape: Shape): Modifier = this
+    .dropShadow(
+        shape = shape,
+        shadow = Shadow(
+            radius = dimensionResource(R.dimen.shadow_radius_standard),
+            spread = dimensionResource(R.dimen.shadow_spread_standard),
+            color = Color.Gray,
+            offset = DpOffset(x = 0.dp, dimensionResource(R.dimen.shadow_offset_y))
         )
     )
 

@@ -63,15 +63,16 @@ fun CloudburstNavHost(
             LocationsListScreen(
                 setTopBarTitle = setTopBarTitle,
                 windowSize = windowSize,
-                onExploreClicked = { locationId ->
-                    navController.navigate(Screen.LocationDetail.createRoute(locationId))
+                onExploreClicked = { locationId -> // User clicks on location from LocationListScreen
+                    navController.navigate(Screen.LocationDetail.createRoute(locationId)) // id for that LocationUiModel is passed up and route created
                 },
                 modifier = Modifier.fillMaxSize()
             )
         }
 
+
         composable(
-            route = Screen.LocationDetail.route,
+            route = Screen.LocationDetail.route, // placeholder to accept locationId as argument
             arguments = listOf(
                 navArgument("locationId") {
                     type = NavType.LongType
@@ -81,7 +82,7 @@ fun CloudburstNavHost(
             LocationDetailRoute(
                 windowSize = windowSize,
                 setTopBarTitle = setTopBarTitle,
-                modifier = modifier
+                modifier = Modifier.fillMaxSize()
             )
         }
     }

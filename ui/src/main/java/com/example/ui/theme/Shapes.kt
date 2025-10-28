@@ -59,4 +59,5 @@ val ExpandedListItemShape = RoundedCornerShape(
 
 val DetailComponentShape = RoundedCornerShape(200.dp)
 
+
 val ListItemInternalText = RoundedCornerShape(50.dp)

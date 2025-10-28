@@ -13,5 +13,4 @@ data class LocationUiModel (
     val isCarbonCapturing: Boolean,
     val category: LocationCategory,
     val isFavourite: Boolean,
-    val isExpanded: Boolean
 )

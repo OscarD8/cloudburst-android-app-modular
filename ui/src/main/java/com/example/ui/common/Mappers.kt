@@ -28,12 +28,11 @@ class LocationMapper @Inject constructor(
             name = location.name,
             address = location.address,
             description = location.description,
-            imageIdentifier = if (imageResId != 0) imageResId else R.drawable.home_cover_image,
+            imageIdentifier = if (imageResId != 0) imageResId else R.drawable.restaurant_mycelia_feast,
             rating = location.rating,
             isCarbonCapturing = location.isCarbonCapturing,
             category = location.category,
             isFavourite = location.isFavourite,
-            isExpanded = false
         )
     }
 }

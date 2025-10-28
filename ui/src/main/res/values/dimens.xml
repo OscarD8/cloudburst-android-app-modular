@@ -66,10 +66,10 @@
     <!-- Detail Screen Items -->
     <dimen name="detail_screen_card_width">389.dp</dimen>
     <dimen name="detail_screen_card_height">291.dp</dimen>
-    <dimen name="detail_screen_info_height">405.dp</dimen>
+    <dimen name="detail_screen_info_height">425.dp</dimen>
     <dimen name="detail_screen_info_width">305.dp</dimen>
-    <dimen name="detail_card_textbox_width">220dp</dimen>
-    <dimen name="detail_card_textbox_height">90.dp</dimen>
+    <dimen name="detail_card_textbox_width">255dp</dimen>
+    <dimen name="detail_card_textbox_height">100.dp</dimen>
 
 
 </resources>

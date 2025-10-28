@@ -8,7 +8,7 @@ class GetLocationsByCategoryUseCase @Inject constructor(
     private val locationRepository: LocationRepository
 ) {
 
-    suspend operator fun invoke(category: LocationCategory) =
+    operator fun invoke(category: LocationCategory) =
         locationRepository.getLocationsByCategory(category)
 }
 

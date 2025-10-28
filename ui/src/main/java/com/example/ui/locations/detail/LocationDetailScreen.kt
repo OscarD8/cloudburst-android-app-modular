@@ -2,6 +2,7 @@ package com.example.ui.locations.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,26 +14,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BookmarkAdded
-import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +50,7 @@ import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.DetailComponentShape
 import com.example.ui.theme.ListItemInternalText
 import com.example.ui.theme.presetContainerShading
+import com.example.ui.theme.presetDropShadow
 
 /**
  * Location detail screen accessed when a user clicks on a location in the list.
@@ -64,6 +64,12 @@ fun LocationDetailRoute(
     viewModel: LocationDetailViewModel = hiltViewModel()
 ) {
     val uiState: LocationDetailUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val locationName: String? = uiState.location?.name
+
+    LaunchedEffect(locationName) {
+        setTopBarTitle(locationName ?: "")
+    }
+
 
     LocationDetailStateWrapper(
         uiState = uiState,
@@ -181,6 +187,7 @@ private fun LocationDetailScreenCompact(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_medium))
         ) {
             FavouriteIconButton(location, onFavouriteClick)
         }
@@ -192,6 +199,7 @@ private fun LocationDetailScreenCompact(
                 .height(dimensionResource(R.dimen.detail_screen_card_height))
                 .layoutId("card")
                 .zIndex(1f)
+                .presetDropShadow(DetailComponentShape)
         ) {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -206,10 +214,11 @@ private fun LocationDetailScreenCompact(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
+
                 Box(
                     modifier = Modifier.padding(
-                        bottom = dimensionResource(R.dimen.padding_xxl),
-                        end = dimensionResource(R.dimen.padding_xxl)
+                        bottom = dimensionResource(R.dimen.padding_super_extra_large_yes),
+                        end = dimensionResource(R.dimen.padding_super_extra_large_yes)
                     )
                 ) {
                     Column(
@@ -219,13 +228,14 @@ private fun LocationDetailScreenCompact(
                             .height(dimensionResource(R.dimen.detail_card_textbox_height))
                             .clip(ListItemInternalText)
                             .presetContainerShading(DetailComponentShape)
-                            .padding(dimensionResource(R.dimen.padding_large))
+                            .padding(horizontal = dimensionResource(R.dimen.padding_xlarge))
 
                     ) {
                         Text(
                             text = location.name,
-                            style = MaterialTheme.typography.displaySmall
-
+                            style = MaterialTheme.typography.headlineSmall.copy(
+                                fontWeight = FontWeight.Normal
+                            )
                         )
                         Text(
                             text = location.address,
@@ -237,19 +247,29 @@ private fun LocationDetailScreenCompact(
         }
 
         Column (
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .height(dimensionResource(R.dimen.detail_screen_info_height))
                 .width(dimensionResource(R.dimen.detail_screen_info_width))
                 .clip(DetailComponentShape)
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(dimensionResource(R.dimen.padding_xlarge))
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    shape = DetailComponentShape
+                )
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_xlarge),
+                    vertical = dimensionResource(R.dimen.padding_large)
+                )
                 .layoutId("column")
         ) {
+            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = location.description,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_xlarge))
+                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_xlarge)),
+                textAlign = TextAlign.Justify
             )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -259,6 +279,7 @@ private fun LocationDetailScreenCompact(
                 RatingRow(location)
                 CarbonRatingRow(location)
             }
+            Spacer(modifier = Modifier.weight(0.25f))
         }
     }
 }
@@ -272,11 +293,11 @@ private val locationDetailConstraintSet = ConstraintSet {
         end.linkTo(parent.end)
         top.linkTo(parent.top)
         bottom.linkTo(parent.bottom)
-        verticalBias = 0.25f
+        verticalBias = 0.2f
     }
 
     constrain(columnRef) {
-        top.linkTo(cardRef.top, margin = 160.dp)
+        top.linkTo(cardRef.top, margin = 170.dp)
         start.linkTo(parent.start)
         end.linkTo(parent.end)
     }
@@ -300,7 +321,7 @@ private fun LocationDetailScreenExpanded(
 
 }
 
-@Preview
+@Preview (showBackground = true)
 @Composable
 private fun PreviewLocationDetailScreen() {
     val location = LocationUiModel(
@@ -308,12 +329,11 @@ private fun PreviewLocationDetailScreen() {
         name = "Volcano",
         address = "Cool Volcano Street",
         description = "This is a volcano you want to see.",
-        imageIdentifier = R.drawable.location_detail_card_bg,
+        imageIdentifier = R.drawable.restaurant_mycelia_feast,
         rating = 4,
         isCarbonCapturing = false,
         category = LocationCategory.RESTAURANTS,
         isFavourite = true,
-        isExpanded = true
     )
     CloudburstTheme {
         LocationDetailScreenCompact(

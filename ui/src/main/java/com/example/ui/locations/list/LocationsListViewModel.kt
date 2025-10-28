@@ -1,22 +1,23 @@
 package com.example.ui.locations.list
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.LocationCategory
 import com.example.domain.usecase.GetLocationsByCategoryUseCase
+import com.example.domain.usecase.ToggleFavouriteUseCase
 import com.example.ui.R
-import com.example.ui.locations.list.ListScreenUiState
 import com.example.ui.common.LocationMapper
 import com.example.ui.locations.LocationUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -32,42 +33,27 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class LocationsListViewModel @Inject constructor(
     private val getLocationsByCategoryUseCase: GetLocationsByCategoryUseCase,
+    private val toggleFavouriteUseCase: ToggleFavouriteUseCase,
     private val locationMapper: LocationMapper,
     private val savedStateHandle: SavedStateHandle // bridging navigation arguments to the viewmodel lifecycle
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ListScreenUiState<LocationUiModel>())
-    val uiState: StateFlow<ListScreenUiState<LocationUiModel>> = _uiState.asStateFlow()
-
-    val categoryName: String = checkNotNull(savedStateHandle["category"])
+    val categoryName: String = checkNotNull(savedStateHandle["category"]) // fail fast, screen should not exist without category argument
     private val locationCategory: LocationCategory = enumValueOf<LocationCategory>(categoryName)
 
-
-    init {
-        loadLocations(locationCategory)
-    }
-
-    /*
-     * Loads the locations from the domain layer and maps them to the UI model.
-     */
-    private fun loadLocations(category: LocationCategory) {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-
-            val locationsFromDomain = getLocationsByCategoryUseCase.invoke(category)
-
-            val locationsForUi = locationsFromDomain.map { location ->
-                locationMapper.toUiModel(location)
+    val uiState: StateFlow<ListScreenUiState<LocationUiModel>> =
+        getLocationsByCategoryUseCase.invoke(locationCategory)
+            .map { locationsFromDomain ->
+                val locationsForUi = locationsFromDomain.map { location ->
+                    locationMapper.toUiModel(location)
+                }
+                ListScreenUiState(items = locationsForUi, isLoading = false, error = null)
             }
-
-            _uiState.update {
-                it.copy(
-                    isLoading = false,
-                    items = locationsForUi
-                )
-            }
-        }
-    }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = ListScreenUiState(isLoading = true)
+            )
 
     fun getCategoryImageRes(): Int {
         return when (locationCategory) {
@@ -76,30 +62,10 @@ class LocationsListViewModel @Inject constructor(
         }
     }
 
-    fun toggleLocationItemExpanded(itemId: Long) {
-        _uiState.update { currentState ->
-            val updatedItems = currentState.items.map { item ->
-                if (itemId == item.id) {
-                    item.copy(isExpanded = !item.isExpanded)
-                } else {
-                    item
-                }
-            }
-            currentState.copy(items = updatedItems)
-        }
-    }
-
-    fun toggleLocationItemFavourite(itemId: Long) {
-        Log.d("LocationsListViewModel", "toggleLocationItemFavourite: $itemId")
-        _uiState.update { currentState ->
-            val updatedItems = currentState.items.map { item ->
-                if (item.id == itemId) {
-                    item.copy(isFavourite = !item.isFavourite)
-                } else {
-                    item
-                }
-            }
-            currentState.copy(items = updatedItems)
+    fun toggleLocationItemFavourite(locationId: Long) {
+        Log.d("LocationsListViewModel", "toggleLocationItemFavourite: $locationId")
+        viewModelScope.launch {
+            toggleFavouriteUseCase.invoke(locationId)
         }
     }
 

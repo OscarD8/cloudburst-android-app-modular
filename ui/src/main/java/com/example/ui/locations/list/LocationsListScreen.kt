@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,7 +44,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -72,6 +76,7 @@ import com.example.ui.theme.ExpandedListItemShape
 import com.example.ui.theme.ListItemInternalText
 import com.example.ui.theme.ListItemShape
 import com.example.ui.theme.presetContainerShading
+import com.example.ui.theme.presetDropShadow
 
 @Composable
 fun LocationsListScreen(
@@ -82,45 +87,63 @@ fun LocationsListScreen(
     viewModel: LocationsListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val categoryName = viewModel.categoryName.lowercase().replaceFirstChar { it.titlecase() }
+    var expandedItemIds by remember { mutableStateOf(emptySet<Long>()) }
 
-    val categoryName = viewModel.categoryName?.lowercase()?.replaceFirstChar { it.titlecase() }
 
     LaunchedEffect(categoryName) {
-        if (categoryName != null) {
-            setTopBarTitle(categoryName)
-
-        }
+        setTopBarTitle(categoryName)
     }
 
-    when (windowSize) {
-        WindowWidthSizeClass.Compact -> {
-            LocationsListScreenCompact(
-                locationsList = uiState.items,
-                onExploreClicked = onExploreClicked,
-                onClickToExpand = { viewModel.toggleLocationItemExpanded(it) },
-                onClickToFavourite = { viewModel.toggleLocationItemFavourite(it) },
-                itemBackgroundRes = viewModel.getCategoryImageRes(),
-                modifier = modifier
-            )
 
+    when {
+        uiState.isLoading -> {
+            Box(modifier = modifier.wrapContentSize(Alignment.Center)) {
+                CircularProgressIndicator()
+            }
         }
-        WindowWidthSizeClass.Medium -> {
-
+        uiState.error != null -> {
+            Box(modifier = modifier.wrapContentSize(Alignment.Center)) {
+                Text(stringResource(uiState.error!!))
+            }
         }
-        WindowWidthSizeClass.Expanded -> {
-
+        uiState.items.isEmpty() -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = "No locations found in this category.")
+            }
         }
         else -> {
+            when (windowSize) {
+                WindowWidthSizeClass.Compact -> {
+                    LocationsListScreenCompact(
+                        locationsList = uiState.items,
+                        expandedIds = expandedItemIds,
+                        onExploreClicked = onExploreClicked,
+                        onClickToExpand = { locationId -> expandedItemIds = expandedItemIds.toggle(locationId) },
+                        onClickToFavourite = { viewModel.toggleLocationItemFavourite(it) },
+                        itemBackgroundRes = viewModel.getCategoryImageRes(),
+                        modifier = modifier
+                    )
+                }
+                WindowWidthSizeClass.Medium -> {
 
+                }
+                WindowWidthSizeClass.Expanded -> {
+
+                }
+                else -> {
+
+                }
+            }
         }
     }
-
 }
 
 @Composable
 private fun LocationsListScreenCompact(
     onExploreClicked: (Long) -> Unit,
     locationsList: List<LocationUiModel>,
+    expandedIds: Set<Long>,
     onClickToExpand: (Long) -> Unit,
     onClickToFavourite: (Long) -> Unit,
     @DrawableRes itemBackgroundRes: Int,
@@ -138,7 +161,10 @@ private fun LocationsListScreenCompact(
     }
 
     LazyColumn(
-        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),
+        contentPadding = PaddingValues(
+            horizontal = dimensionResource(R.dimen.padding_small),
+            vertical = dimensionResource(R.dimen.padding_large)
+        ),
         verticalArrangement = Arrangement.spacedBy(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -155,8 +181,9 @@ private fun LocationsListScreenCompact(
             ) {
                 LocationListItem(
                     location = location,
+                    isExpanded = location.id in expandedIds,
                     onExploreClicked = { onExploreClicked(location.id) },
-                    onClickToExpand = { onClickToExpand(location.id) },
+                    onClickToExpand = onClickToExpand,
                     onClickToFavourite = { onClickToFavourite(location.id) },
                     cropAlignment = backgroundCropPresets[index % backgroundCropPresets.size], // align image by sequence of crop presets
                     itemBackgroundRes = itemBackgroundRes,
@@ -195,8 +222,9 @@ private fun LocationsListScreenExpanded(
 @Composable
 private fun LocationListItem(
     location: LocationUiModel,
+    isExpanded: Boolean,
     onExploreClicked: () -> Unit,
-    onClickToExpand: () -> Unit,
+    onClickToExpand: (Long) -> Unit,
     onClickToFavourite: () -> Unit,
     cropAlignment: Alignment,
     modifier: Modifier = Modifier,
@@ -217,14 +245,7 @@ private fun LocationListItem(
         Card(
             shape = ListItemShape,
             modifier = modifier
-                .dropShadow(
-                    ListItemShape, shadow = Shadow(
-                        radius = dimensionResource(R.dimen.shadow_radius_standard),
-                        spread = dimensionResource(R.dimen.shadow_spread_standard),
-                        color = Color.Gray,
-                        offset = DpOffset(x = 0.dp, dimensionResource(R.dimen.shadow_offset_y))
-                    )
-                )
+                .presetDropShadow(ListItemShape)
                 .zIndex(1f)
         ) {
             Box {
@@ -278,11 +299,11 @@ private fun LocationListItem(
                             .presetContainerShading(CircleShape)
                     ) {
                         IconButton(
-                            onClick = { onClickToExpand() },
+                            onClick = { onClickToExpand(location.id) },
                             modifier = Modifier.fillMaxSize()
                         ) {
                             Icon(
-                                imageVector = if (!location.isExpanded) Icons.Filled.ArrowDropDown else Icons.Filled.ArrowDropUp,
+                                imageVector = if (!isExpanded) Icons.Filled.ArrowDropDown else Icons.Filled.ArrowDropUp,
                                 contentDescription = stringResource(
                                     R.string.category_arrow_content_desc,
                                     location.name
@@ -295,7 +316,7 @@ private fun LocationListItem(
             }
         }
 
-        if (location.isExpanded) {
+        if (isExpanded) {
             Column(
                 modifier = Modifier
                     .height(dimensionResource(R.dimen.list_item_expanded_height))
@@ -345,6 +366,10 @@ private fun LocationListItem(
     }
 }
 
+fun Set<Long>.toggle(id: Long): Set<Long> {
+    return if (id in this) this - id else this + id
+}
+
 
 @Preview(showBackground = true)
 @Composable
@@ -353,7 +378,6 @@ private fun PreviewLocationListItem() {
         id = 1,
         name = "Cool Volcano",
         address = "Volcanoes",
-        isExpanded = true,
         isFavourite = false,
         rating = 2,
         isCarbonCapturing = true,
@@ -364,6 +388,7 @@ private fun PreviewLocationListItem() {
     CloudburstTheme {
         LocationListItem(
             location = location,
+            isExpanded = true,
             onExploreClicked = {},
             onClickToExpand = {},
             onClickToFavourite = {},
