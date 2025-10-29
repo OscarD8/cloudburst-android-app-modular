@@ -146,8 +146,8 @@ private fun LocationsListScreenCompact(
     expandedIds: Set<Long>,
     onClickToExpand: (Long) -> Unit,
     onClickToFavourite: (Long) -> Unit,
-    @DrawableRes itemBackgroundRes: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    @DrawableRes itemBackgroundRes: Int
 ) {
 
     //  Create the visibility state *once* for the whole screen
@@ -220,14 +220,14 @@ private fun LocationsListScreenExpanded(
 
 
 @Composable
-private fun LocationListItem(
+internal fun LocationListItem(
     location: LocationUiModel,
     isExpanded: Boolean,
     onExploreClicked: () -> Unit,
     onClickToExpand: () -> Unit,
     onClickToFavourite: () -> Unit,
-    cropAlignment: Alignment,
     modifier: Modifier = Modifier,
+    cropAlignment: Alignment = Alignment.Center,
     @DrawableRes itemBackgroundRes: Int = R.drawable.list_master_bg,
 ) {
 

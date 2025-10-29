@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.core.navigation.Screen
 import com.example.ui.categories.CategoriesScreen
+import com.example.ui.favourites.FavouritesScreen
 import com.example.ui.home.CloudburstHomeScreen
 import com.example.ui.locations.detail.LocationDetailRoute
 import com.example.ui.locations.list.LocationsListScreen
@@ -19,7 +20,7 @@ import com.example.ui.locations.list.LocationsListScreen
  * Defines the routes for navigation.
  */
 @Composable
-fun CloudburstNavHost(
+internal fun CloudburstNavHost(
     navController: NavHostController,
     windowSize: WindowWidthSizeClass,
     setTopBarTitle: (String) -> Unit,
@@ -45,6 +46,17 @@ fun CloudburstNavHost(
                 onCategorySelected = { category ->
                     navController.navigate(Screen.LocationsList.createRoute(category.name)) // route passed in to make URL by category
                 },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        composable( Screen.Favourites.route ) {
+            FavouritesScreen(
+                setTopBarTitle = setTopBarTitle,
+                windowSize = windowSize,
+                onExploreClicked = { locationId ->
+                    navController.navigate(Screen.LocationDetail.createRoute(locationId))
+               },
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -85,5 +97,7 @@ fun CloudburstNavHost(
                 modifier = Modifier.fillMaxSize()
             )
         }
+
+
     }
 }

@@ -10,6 +10,7 @@ interface LocationRepository {
     fun getLocationsAll() : Flow<List<Location>>
     fun getLocationsByCategory(category: LocationCategory) : Flow<List<Location>>
     fun getLocationById(id: Long) : Flow<Location?>
+    fun getFavourites() : Flow<List<Location>>
     suspend fun getCategories() : List<LocationCategory>
     fun toggleFavourite(locationId: Long)
 

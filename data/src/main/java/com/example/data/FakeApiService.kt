@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
@@ -473,7 +474,6 @@ internal object FakeApiService {
 //    }
 
 
-
     // GOING TO ONE LIST AS ALL THE ABOVE FEELS MESSY
 
     // Write Access
@@ -491,9 +491,17 @@ internal object FakeApiService {
      * @return Flow of a list of locations filtered by category.
      */
     fun getLocationsByCategory(category: LocationCategory): Flow<List<LocationDataEntry>> {
-        return _allLocations.map { locations ->
+        return allLocations.map { locations ->
             locations.filter { it.category == category }
-         }
+        }
+    }
+
+    fun getFavourites(): Flow<List<LocationDataEntry>> {
+        return allLocations.map { allLocations ->
+            allLocations.filter { locationDataEntry ->
+                locationDataEntry.isFavourite
+            }
+        }
     }
 
     /**
@@ -515,10 +523,12 @@ internal object FakeApiService {
     fun toggleFavourite(locationId: Long) {
         _allLocations.update { list ->
             list.map { location ->
-                if (location.id == locationId) { location.copy(isFavourite = !location.isFavourite) }
-                else { location }
+                if (location.id == locationId) {
+                    location.copy(isFavourite = !location.isFavourite)
+                } else {
+                    location
+                }
             }
         }
     }
-
 }

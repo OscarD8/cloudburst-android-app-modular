@@ -35,6 +35,14 @@ class LocationRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getFavourites(): Flow<List<Location>> {
+        val sourceFlow = FakeApiService.getFavourites() // flow from the database
+
+        return sourceFlow.map { dataEntries -> // map this flow to filter into domain flow and pass up
+            dataEntries.map { dataEntry -> mapLocationToDomainModel(dataEntry) }
+        }
+    }
+
     override fun getLocationById(id: Long): Flow<Location?> {
         return FakeApiService.getLocationStreamById(id)
             .map { dataEntry ->
@@ -49,6 +57,7 @@ class LocationRepositoryImpl @Inject constructor(
     override fun toggleFavourite(locationId: Long) {
         FakeApiService.toggleFavourite(locationId)
     }
+
 
     private fun mapLocationToDomainModel(
         locationDataEntry: FakeApiService.LocationDataEntry

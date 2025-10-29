@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -158,7 +159,8 @@ fun CloudburstNavBar(
                     )
                 },
                 colors = NavigationBarItemDefaults.colors().copy(
-                    selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    selectedIndicatorColor = MaterialTheme.colorScheme.inverseOnSurface
                 ),
                 modifier = Modifier
                     .padding(horizontal = dimensionResource(R.dimen.navbar_item_horizontal_padding))
