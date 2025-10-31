@@ -46,9 +46,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.domain.model.LocationCategory
 import com.example.ui.R
+import com.example.ui.categories.getTranslatedCategoryName
 import com.example.ui.common.components.CarbonRatingRow
 import com.example.ui.common.components.FavouriteIconButton
 import com.example.ui.common.components.RatingRow
+import com.example.ui.common.components.removeLast
 import com.example.ui.locations.LocationUiModel
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.DetailComponentShape
@@ -108,7 +110,9 @@ fun LocationDetailRoute(
  * Wrapper for the location detail screen to handle state changes of the detail screen loading.
  *
  *
- * @param uiState The current state of the detail screen.
+ * @param uiState The current state of the detail screen as what can only be the same object between the null check and the passing to the corresponding composable
+ * ... to please compiler but I don't know if I am now wrong.
+ *
  * @param windowSize The current window size.
  * @param onFavouriteClick The callback to invoke when the favourite button is clicked.
  */
@@ -237,12 +241,6 @@ private fun LocationDetailScreenCompact(
                 .height(dimensionResource(R.dimen.detail_screen_info_height))
                 .width(dimensionResource(R.dimen.detail_screen_info_width))
                 .clip(DetailComponentShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant,
-                    shape = DetailComponentShape
-                )
                 .padding(
                     horizontal = dimensionResource(R.dimen.padding_xlarge),
                     vertical = dimensionResource(R.dimen.padding_large)
@@ -265,6 +263,19 @@ private fun LocationDetailScreenMedium(
     onFavouriteClick: () -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
+
+        // Favourite Icon
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopEnd)
+                .padding(dimensionResource(R.dimen.padding_medium))
+        ) {
+            FavouriteIconButton(location, onFavouriteClick)
+        }
+
+        // Wrapper for image and text
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -300,31 +311,21 @@ private fun LocationDetailScreenMedium(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxHeight(0.5f)
                     .padding(vertical = dimensionResource(R.dimen.padding_medium))
             ) {
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_super_extra_large_yes)))
 
                 DetailInfoContent(
                     location = location,
                     textStyle = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium)).fillMaxHeight()
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+
                 )
 
-                Spacer(modifier = Modifier.weight(1f))
             }
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopEnd)
-                .padding(dimensionResource(R.dimen.padding_medium))
-        ) {
-            FavouriteIconButton(location, onFavouriteClick)
         }
     }
 }
@@ -353,13 +354,13 @@ private fun LocationDetailScreenExpanded(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = dimensionResource(R.dimen.padding_xlarge)),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Box(
                 modifier = Modifier
-                    .weight(1.5f)
+                    .weight(1f)
                     .fillMaxHeight(0.8f)
                     .presetDropShadow(DetailComponentShape)
                     .clip(DetailComponentShape),
@@ -368,7 +369,8 @@ private fun LocationDetailScreenExpanded(
                 // 1. Reusable Image Helper
                 LocationImage(
                     location = location,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                 )
 
                 // 2. Reusable Text Overlay Helper
@@ -378,11 +380,14 @@ private fun LocationDetailScreenExpanded(
                 )
             }
 
+
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
+                    .clip(DetailComponentShape)
+                    .width(dimensionResource(R.dimen.list_item_width))
                     .padding(vertical = dimensionResource(R.dimen.padding_large))
+                    .height(dimensionResource(R.dimen.detail_medium_infoContent))
+
             ) {
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_super_extra_large_yes)))
 
@@ -391,10 +396,10 @@ private fun LocationDetailScreenExpanded(
                     textStyle = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_large))
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(R.dimen.padding_large))
                 )
 
-                Spacer(modifier = Modifier.weight(1f)) // Flexible spacer
             }
         }
     }
@@ -449,7 +454,16 @@ private fun DetailInfoContent(
     modifier: Modifier = Modifier,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
+    Column(modifier = modifier
+        .padding(dimensionResource(R.dimen.padding_large)),
+        verticalArrangement = Arrangement.Center)
+    {
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = getTranslatedCategoryName(location.category).removeLast(),
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_medium))
+        )
         Text(
             text = location.description,
             style = textStyle,
@@ -505,7 +519,7 @@ private val locationDetailConstraintSet = ConstraintSet {
     }
 
     constrain(columnRef) {
-        top.linkTo(cardRef.top, margin = 170.dp)
+        top.linkTo(cardRef.top, margin = 180.dp)
         start.linkTo(parent.start)
         end.linkTo(parent.end)
     }

@@ -38,6 +38,4 @@ import dagger.hilt.android.HiltAndroidApp
  * It must be registered in the `AndroidManifest.xml`.
  */
 @HiltAndroidApp
-class CloudburstApp : Application() {
-
-}
+class CloudburstApp : Application()

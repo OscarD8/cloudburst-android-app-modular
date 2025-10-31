@@ -358,7 +358,7 @@ private fun CategoryListItem(
  * String representations are used for text display on the cards themselves.
  */
 @Composable
-private fun getTranslatedCategoryName(category: LocationCategory): String {
+internal fun getTranslatedCategoryName(category: LocationCategory): String {
     return when (category) {
         LocationCategory.RESTAURANTS -> stringResource(R.string.restaurant_header)
         LocationCategory.CAFES -> stringResource(R.string.cafe_header)

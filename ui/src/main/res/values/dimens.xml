@@ -51,7 +51,7 @@
     <dimen name="list_item_internal_textbox_width_cat">146.dp</dimen>
     <dimen name="list_item_internal_textbox_height_cat">60.dp</dimen>
     <dimen name="list_item_internal_textbox_width">203.dp</dimen>
-    <dimen name="list_item_internal_textbox_height">86.dp</dimen>
+    <dimen name="list_item_internal_textbox_height">95.dp</dimen>
     <dimen name="list_item_width">335.dp</dimen>
     <dimen name="list_item_width_medium">450.dp</dimen>
     <dimen name="list_item_height_medium">184.dp</dimen>
@@ -72,7 +72,8 @@
     <dimen name="detail_screen_info_height">425.dp</dimen>
     <dimen name="detail_screen_info_width">305.dp</dimen>
     <dimen name="detail_card_textbox_width">255dp</dimen>
-    <dimen name="detail_card_textbox_height">100.dp</dimen>
+    <dimen name="detail_card_textbox_height">110.dp</dimen>
+    <dimen name="detail_medium_infoContent">400.dp</dimen>
 
 
 </resources>

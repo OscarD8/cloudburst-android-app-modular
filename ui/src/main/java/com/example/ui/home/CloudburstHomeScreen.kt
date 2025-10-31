@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -158,6 +159,7 @@ internal fun HomeScreenMedium(
             modifier = Modifier
                 .layoutId("textbox")
                 .fillMaxWidth(0.8f)
+
         )
     }
 }
@@ -238,7 +240,10 @@ private fun HomeTextBox(
                     text = stringResource(R.string.home_city_description),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Justify,
-                    modifier = Modifier.padding(top = dimensionResource(R.dimen.home_text_textbox_padding)),
+                    modifier = Modifier.padding(
+                        top = dimensionResource(R.dimen.home_text_textbox_padding),
+                        bottom = dimensionResource(R.dimen.padding_large)
+                    ),
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
@@ -250,7 +255,7 @@ private fun HomeTextBox(
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
-}
+            }
             ExploreButton(onClick = onExploreClicked)
         }
     }

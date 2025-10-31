@@ -300,7 +300,7 @@ private fun LocationsListScreenExpanded(
     }
 
     LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(3),
+        columns = StaggeredGridCells.Fixed(2),
         modifier = modifier,
         contentPadding = PaddingValues(
             horizontal = dimensionResource(R.dimen.padding_large),
@@ -345,7 +345,7 @@ internal fun LocationListItem(
     @DrawableRes itemBackgroundRes: Int = R.drawable.list_master_bg,
 ) {
 
-    Column(
+    Column( // wrapper for animating content size
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .animateContentSize(
@@ -363,7 +363,7 @@ internal fun LocationListItem(
                 .zIndex(1f)
         ) {
             Box {
-                Image(
+                Image( // should extract out
                     painter = painterResource(itemBackgroundRes),
                     contentScale = ContentScale.Crop,
                     alignment = cropAlignment,
@@ -376,8 +376,8 @@ internal fun LocationListItem(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(
-                            start = dimensionResource(R.dimen.padding_large),
-                            end = dimensionResource(R.dimen.padding_large),
+                            start = dimensionResource(R.dimen.padding_xlarge),
+                            end = dimensionResource(R.dimen.padding_xlarge),
                             top = dimensionResource(R.dimen.padding_xlarge)
                         )
                 ) {

@@ -74,7 +74,7 @@ fun CloudburstAppBase(
     /* Using the current route, we can look up the associated navigation item to
      enable a fetch of the title (label) related to that route. */
     val currentNavItem = navigationItemMap[currentRoute] // this can be null (in which case when fetching title just take app name)
-    val currentTitle = currentNavItem?.labelRes  ?: R.string.app_name
+    currentNavItem?.labelRes  ?: R.string.app_name
 
     /**
      * Establishing the UI contained in a Scaffold within the Surface established in MainActivity.
