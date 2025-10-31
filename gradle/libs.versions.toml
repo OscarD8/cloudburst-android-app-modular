@@ -23,6 +23,7 @@ constraintlayoutCompose = "1.1.1"
 junit = "4.13.2"
 appcompat = "1.7.1"
 navigationCompose = "2.9.5"
+foundationLayout = "1.9.4"
 
 
 [libraries]
@@ -58,6 +59,7 @@ mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter",
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +34,7 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,6 +55,7 @@ import com.example.ui.theme.DetailComponentShape
 import com.example.ui.theme.ListItemInternalText
 import com.example.ui.theme.presetContainerShading
 import com.example.ui.theme.presetDropShadow
+import com.example.ui.theme.shadowCustom
 
 /**
  * Location detail screen accessed when a user clicks on a location in the list.
@@ -189,7 +194,7 @@ private fun LocationDetailScreenCompact(
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_medium))
         ) {
-            FavouriteIconButton(location, onFavouriteClick )
+            FavouriteIconButton(location, onFavouriteClick)
         }
 
         Card(
@@ -197,23 +202,18 @@ private fun LocationDetailScreenCompact(
             modifier = Modifier
                 .width(dimensionResource(R.dimen.detail_screen_card_width))
                 .height(dimensionResource(R.dimen.detail_screen_card_height))
-                .layoutId("card")
+                .layoutId("card") // Layout modifier
                 .zIndex(1f)
                 .presetDropShadow(DetailComponentShape)
         ) {
             Box(
                 contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
-                Box{
-                    Image(
-                        painter = painterResource(location.imageIdentifier),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
+                LocationImage(
+                    location = location,
+                    modifier = Modifier.fillMaxSize()
+                )
 
                 Box(
                     modifier = Modifier.padding(
@@ -221,32 +221,17 @@ private fun LocationDetailScreenCompact(
                         end = dimensionResource(R.dimen.padding_super_extra_large_yes)
                     )
                 ) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
+                    DetailHeaderTextOverlay(
+                        location = location,
+                        modifier = Modifier // Pass layout-specific modifiers
                             .width(dimensionResource(R.dimen.detail_card_textbox_width))
                             .height(dimensionResource(R.dimen.detail_card_textbox_height))
-                            .clip(ListItemInternalText)
-                            .presetContainerShading(DetailComponentShape)
-                            .padding(horizontal = dimensionResource(R.dimen.padding_xlarge))
-
-                    ) {
-                        Text(
-                            text = location.name,
-                            style = MaterialTheme.typography.headlineSmall.copy(
-                                fontWeight = FontWeight.Normal
-                            )
-                        )
-                        Text(
-                            text = location.address,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
+                    )
                 }
             }
         }
 
-        Column (
+        Column(
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .height(dimensionResource(R.dimen.detail_screen_info_height))
@@ -265,23 +250,246 @@ private fun LocationDetailScreenCompact(
                 .layoutId("column")
         ) {
             Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = location.description,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_xlarge)),
-                textAlign = TextAlign.Justify
-            )
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                RatingRow(location)
-                CarbonRatingRow(location)
-            }
+
+            DetailInfoContent(location = location)
+
             Spacer(modifier = Modifier.weight(0.25f))
         }
     }
+}
+
+@Composable
+private fun LocationDetailScreenMedium(
+    location: LocationUiModel,
+    modifier: Modifier = Modifier,
+    onFavouriteClick: () -> Unit
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding( dimensionResource(R.dimen.padding_xlarge)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(0.7f)
+                    .presetDropShadow(DetailComponentShape)
+                    .clip(DetailComponentShape),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                LocationImage(
+                    location = location,
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+                DetailHeaderTextOverlay(
+                    location = location,
+                    modifier = Modifier.padding(
+                        start = dimensionResource(R.dimen.padding_large),
+                        end = dimensionResource(R.dimen.padding_large),
+                        bottom = dimensionResource(R.dimen.padding_super_extra_large_yes)
+                    )
+                )
+            }
+
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .padding(vertical = dimensionResource(R.dimen.padding_medium))
+            ) {
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_super_extra_large_yes)))
+
+                DetailInfoContent(
+                    location = location,
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium)).fillMaxHeight()
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopEnd)
+                .padding(dimensionResource(R.dimen.padding_medium))
+        ) {
+            FavouriteIconButton(location, onFavouriteClick)
+        }
+    }
+}
+
+@Composable
+private fun LocationDetailScreenExpanded(
+    location: LocationUiModel,
+    modifier: Modifier = Modifier,
+    onFavouriteClick: () -> Unit
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+
+        // Favourite Icon
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopEnd)
+                .padding(dimensionResource(R.dimen.padding_medium))
+        ) {
+            FavouriteIconButton(location, onFavouriteClick)
+        }
+
+        // Wrap Image and Text
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = dimensionResource(R.dimen.padding_xlarge)),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .weight(1.5f)
+                    .fillMaxHeight(0.8f)
+                    .presetDropShadow(DetailComponentShape)
+                    .clip(DetailComponentShape),
+                contentAlignment = Alignment.BottomStart
+            ) {
+                // 1. Reusable Image Helper
+                LocationImage(
+                    location = location,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                // 2. Reusable Text Overlay Helper
+                DetailHeaderTextOverlay(
+                    location = location,
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_super_extra_large_yes))
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .padding(vertical = dimensionResource(R.dimen.padding_large))
+            ) {
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_super_extra_large_yes)))
+
+                DetailInfoContent(
+                    location = location,
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_large))
+                )
+
+                Spacer(modifier = Modifier.weight(1f)) // Flexible spacer
+            }
+        }
+    }
+}
+
+/**
+ * The text overlay box containing the location name and address.
+ * This is intended to be placed *inside* a container by the caller.
+ *
+ * @param location The location to display.
+ * @param modifier The modifier to apply to the Column.
+ */
+@Composable
+private fun DetailHeaderTextOverlay(
+    location: LocationUiModel,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier // Let the caller define size, padding, etc.
+            .clip(ListItemInternalText)
+            .presetContainerShading(DetailComponentShape)
+            // Use consistent internal padding
+            .padding(
+                horizontal = dimensionResource(R.dimen.padding_xlarge),
+                vertical = dimensionResource(R.dimen.padding_large)
+            )
+    ) {
+        Text(
+            text = location.name,
+            style = MaterialTheme.typography.headlineSmall.copy(
+                fontWeight = FontWeight.Normal
+            )
+        )
+        Text(
+            text = location.address,
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+/**
+ * The core content of the detail screen, showing description and ratings.
+ * This is intended to be placed *inside* a container by the caller.
+ *
+ * @param location The location to display.
+ * @param modifier The modifier to apply to the root Column.
+ */
+@Composable
+private fun DetailInfoContent(
+    location: LocationUiModel,
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium
+) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
+        Text(
+            text = location.description,
+            style = textStyle,
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_xlarge)),
+            textAlign = TextAlign.Justify
+        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+            modifier = Modifier.fillMaxWidth() // This is intrinsic to the content
+        ) {
+            RatingRow(location)
+            CarbonRatingRow(location)
+        }
+    }
+}
+
+/**
+ * Displays the primary image for a location.
+ *
+ * @param location The location to display the image for.
+ * @param modifier The modifier to apply to the Image. The caller is responsible
+ * for providing size modifiers (like .fillMaxSize()).
+ * @param contentScale The content scale to apply (defaults to Crop).
+ * @param contentDescription The accessibility content description.
+ */
+@Composable
+private fun LocationImage(
+    location: LocationUiModel,
+    modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Crop,
+    // Provides a good default for accessibility, but can be set to null.
+    contentDescription: String? = "Image of ${location.name}"
+) {
+    Image(
+        painter = painterResource(location.imageIdentifier),
+        contentDescription = contentDescription,
+        contentScale = contentScale,
+        modifier = modifier
+    )
 }
 
 private val locationDetailConstraintSet = ConstraintSet {
@@ -303,23 +511,7 @@ private val locationDetailConstraintSet = ConstraintSet {
     }
 }
 
-@Composable
-private fun LocationDetailScreenMedium(
-    location: LocationUiModel,
-    modifier: Modifier = Modifier,
-    onFavouriteClick: () -> Unit
-) {
 
-}
-
-@Composable
-private fun LocationDetailScreenExpanded(
-    location: LocationUiModel,
-    modifier: Modifier = Modifier,
-    onFavouriteClick: () -> Unit
-) {
-
-}
 
 @Preview (showBackground = true)
 @Composable

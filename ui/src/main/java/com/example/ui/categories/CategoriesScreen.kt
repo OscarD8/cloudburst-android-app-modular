@@ -16,16 +16,17 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,14 +54,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.core.navigation.R as NavR
 import com.example.domain.model.LocationCategory
 import com.example.ui.R
 import com.example.ui.common.backgroundCropPresets
-import com.example.core.navigation.R as NavR
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.ListItemInternalText
 import com.example.ui.theme.ListItemShape
-import com.example.ui.theme.shadowCustom
 
 /**
  * A composable that displays a list of categories.
@@ -103,20 +103,13 @@ fun CategoriesScreen(
                 modifier = modifier
             )
         }
-        WindowWidthSizeClass.Expanded -> {
-            CategoriesScreenExpanded(
-                categoriesList = uiState.items,
-                onCategorySelected = onCategorySelected,
-                backgroundCropPresets = backgroundCropPresets,
-                modifier = modifier
-            )
-        } else -> {
-            CategoriesScreenCompact(
-                categoriesList = uiState.items,
-                onCategorySelected = onCategorySelected,
-                backgroundCropPresets = backgroundCropPresets,
-                modifier = modifier
-            )
+        else -> {
+                CategoriesScreenCompact(
+                    categoriesList = uiState.items,
+                    onCategorySelected = onCategorySelected,
+                    backgroundCropPresets = backgroundCropPresets,
+                    modifier = modifier
+                )
         }
     }
 
@@ -126,7 +119,7 @@ fun CategoriesScreen(
  * A composable that displays a list of categories in a compact layout.
  */
 @Composable
-private fun CategoriesScreenCompact (
+private fun CategoriesScreenCompact(
     categoriesList: List<LocationCategory>,
     onCategorySelected: (LocationCategory) -> Unit,
     backgroundCropPresets: List<Alignment>,
@@ -177,11 +170,12 @@ private fun CategoriesScreenCompact (
                                 initialOffsetY = { it * (index + 1) }
                             )
                         )
-                        .dropShadow(ListItemShape, shadow = Shadow(
-                            radius = dimensionResource(R.dimen.shadow_radius_standard),
-                            spread = dimensionResource(R.dimen.shadow_spread_standard),
-                            color = Color.Gray,
-                            offset = DpOffset(x = 0.dp, dimensionResource(R.dimen.shadow_offset_y))
+                        .dropShadow(
+                            ListItemShape, shadow = Shadow(
+                                radius = dimensionResource(R.dimen.shadow_radius_standard),
+                                spread = dimensionResource(R.dimen.shadow_spread_standard),
+                                color = Color.Gray,
+                                offset = DpOffset(x = 0.dp, dimensionResource(R.dimen.shadow_offset_y))
                             )
                         )
                 )
@@ -191,23 +185,67 @@ private fun CategoriesScreenCompact (
 }
 
 @Composable
-private fun CategoriesScreenMedium (
+private fun CategoriesScreenMedium(
     categoriesList: List<LocationCategory>,
     onCategorySelected: (LocationCategory) -> Unit,
     backgroundCropPresets: List<Alignment>,
     modifier: Modifier = Modifier
 ) {
+    val isVisible = remember { MutableTransitionState(false) }
 
-}
+    LaunchedEffect(Unit) {
+        isVisible.targetState = true
+    }
 
-@Composable
-private fun CategoriesScreenExpanded (
-    categoriesList: List<LocationCategory>,
-    onCategorySelected: (LocationCategory) -> Unit,
-    backgroundCropPresets: List<Alignment>,
-    modifier: Modifier = Modifier
-) {
-
+    LazyColumn(
+        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_large)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large)),
+        modifier = modifier
+    ) {
+        itemsIndexed(categoriesList) { index, category ->
+            AnimatedVisibility(
+                visibleState = isVisible,
+                enter = fadeIn(
+                    animationSpec = spring(dampingRatio = DampingRatioLowBouncy)
+                ),
+                exit = fadeOut(),
+                modifier = modifier
+            ) {
+                CategoryListItem(
+                    category = category,
+                    onCategorySelected = onCategorySelected,
+                    cropAlignment = backgroundCropPresets[index % backgroundCropPresets.size],
+                    modifier = Modifier
+                        .height(dimensionResource(R.dimen.list_item_height))
+                        .padding(
+                            horizontal = dimensionResource(R.dimen.padding_medium),
+                            vertical = dimensionResource(R.dimen.padding_medium)
+                        )
+                        .animateEnterExit(
+                            enter = slideInVertically(
+                                animationSpec = spring(
+                                    stiffness = Spring.StiffnessVeryLow,
+                                    dampingRatio = DampingRatioLowBouncy
+                                ),
+                                initialOffsetY = { it * (index + 1) } // Animate rows
+                            )
+                        )
+                        .dropShadow(
+                            ListItemShape, shadow = Shadow(
+                                radius = dimensionResource(R.dimen.shadow_radius_standard),
+                                spread = dimensionResource(R.dimen.shadow_spread_standard),
+                                color = Color.Gray,
+                                offset = DpOffset(
+                                    x = 0.dp,
+                                    dimensionResource(R.dimen.shadow_offset_y)
+                                )
+                            )
+                        )
+                )
+            }
+        }
+    }
 }
 
 /**
@@ -224,7 +262,7 @@ private fun CategoryListItem(
     cropAlignment: Alignment,
     modifier: Modifier = Modifier
 ) {
-    Card (
+    Card(
         shape = ListItemShape,
         modifier = modifier
     ) {
@@ -247,7 +285,7 @@ private fun CategoryListItem(
                         top = dimensionResource(R.dimen.padding_xlarge)
                     )
             ) {
-                Box ( // container for text of category item
+                Box( // container for text of category item
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .size(
@@ -297,13 +335,16 @@ private fun CategoryListItem(
                             )
                         )
                 ) {
-                    IconButton (
+                    IconButton(
                         onClick = { onCategorySelected(category) },
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                            contentDescription = stringResource(R.string.category_arrow_content_desc, category),
+                            contentDescription = stringResource(
+                                R.string.category_arrow_content_desc,
+                                category.name
+                            ),
                         )
                     }
                 }
@@ -360,3 +401,16 @@ fun PreviewCategoryItemDark() {
         )
     }
 }
+
+@Preview(showBackground = true, widthDp = 800, heightDp = 1280)
+@Composable
+fun PreviewCategoriesScreenMedium() {
+    CloudburstTheme {
+        CategoriesScreenMedium(
+            categoriesList = LocationCategory.values().toList(),
+            onCategorySelected = {},
+            backgroundCropPresets = backgroundCropPresets,
+        )
+    }
+}
+

@@ -1,6 +1,9 @@
 package com.example.ui.common
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -11,10 +14,12 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -29,6 +34,7 @@ import com.example.core.navigation.minimisedNavList
 import com.example.domain.model.LocationCategory
 import com.example.ui.R
 import com.example.ui.theme.CloudburstTheme
+import com.example.ui.theme.RightSideRoundedShape30
 import com.example.ui.theme.TopRoundedShape30
 import com.example.ui.theme.shadowCustom
 
@@ -38,12 +44,12 @@ import com.example.ui.theme.shadowCustom
  * This composable iterates through a list of [com.example.core.navigation.NavigationItem]s and displays them as selectable
  * [NavigationDrawerItem]s. It highlights the currently selected item and handles tab press events.
  *
- * @param currentCategory The currently active [LocationCategory], used to highlight the selected item.
  * @param onTabPressed A lambda function that is invoked when a navigation item is clicked,
  * passing the selected [LocationCategory].
  * @param modifier A [Modifier] to be applied to the content container.
  * @param navItems A list of [com.example.core.navigation.NavigationItem] objects that define the content and routing
  * for each drawer item.
+ * @param currentRoute The route of the currently selected [NavigationItem].
  */
 @Composable
 fun CloudburstNavigationDrawerContent(
@@ -71,7 +77,6 @@ fun CloudburstNavigationDrawerContent(
             colors = NavigationDrawerItemDefaults
                 .colors(
                     selectedContainerColor = MaterialTheme.colorScheme.onPrimary,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 ),
             modifier = modifier
         )
@@ -84,10 +89,10 @@ fun CloudburstNavigationDrawerContent(
  * It displays a series of icons for top-level navigation destinations, highlighting the
  * currently active one.
  *
- * @param currentCategory The currently active [LocationCategory] to be highlighted.
  * @param onTabPressed A callback invoked with the new [LocationCategory] when an item is pressed.
  * @param modifier A [Modifier] to be applied to the [NavigationRail].
  * @param navItems The list of [NavigationItem]s to be displayed.
+ * @param currentRoute The route of the currently active [NavigationItem].
  */
 @Composable
 fun CloudburstNavigationRail(
@@ -96,7 +101,18 @@ fun CloudburstNavigationRail(
     currentRoute: String,
     onTabPressed: (String) -> Unit,
 ) {
-    NavigationRail(modifier = modifier) {
+    NavigationRail(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        modifier = modifier
+            .shadowCustom(
+                offsetX = dimensionResource(id = R.dimen.navbar_item_horizontal_padding),
+                blurRadius = dimensionResource(id = R.dimen.shadow_radius_standard),
+                shapeRadius = dimensionResource(id = R.dimen.shadow_shape_radius),
+                color = Color.LightGray
+            )
+            .clip(RightSideRoundedShape30)
+    ) {
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.navdrawer_spacer_height)))
         minimisedNavList.forEach { navItem ->
             NavigationRailItem(
                 selected = navItem.route == currentRoute,
@@ -106,7 +122,10 @@ fun CloudburstNavigationRail(
                         contentDescription = stringResource(navItem.labelRes)
                     )
                 },
-                onClick = { onTabPressed(navItem.route) }
+                onClick = { onTabPressed(navItem.route) },
+                colors = NavigationRailItemDefaults.colors().copy(
+                    selectedIndicatorColor = MaterialTheme.colorScheme.inverseOnSurface
+                )
             )
         }
     }
@@ -118,10 +137,10 @@ fun CloudburstNavigationRail(
  * This composable features a custom shape, shadow, and color scheme. It displays both an icon
  * and a label for each navigation destination.
  *
- * @param currentCategory The currently active [LocationCategory].
  * @param onTabPressed A lambda that fires when a user taps on a navigation item.
  * @param modifier A [Modifier] to be applied to the [NavigationBar].
  * @param navItems The list of [NavigationItem]s to populate the bar.
+ * @param currentRoute The route of the currently active [NavigationItem].
  */
 @Composable
 fun CloudburstNavBar(
@@ -134,9 +153,10 @@ fun CloudburstNavBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier
             .shadowCustom(
-                offsetY = dimensionResource(id = R.dimen.navbar_item_horizontal_padding),
+                offsetY = dimensionResource(id = R.dimen.shadow_offset_negative_y),
                 blurRadius = dimensionResource(id = R.dimen.shadow_radius_standard),
-                shapeRadius = dimensionResource(id = R.dimen.shadow_shape_radius)
+                shapeRadius = dimensionResource(id = R.dimen.shadow_shape_radius),
+                color = Color.LightGray
             )
             .clip(TopRoundedShape30)
     ) {
@@ -159,7 +179,6 @@ fun CloudburstNavBar(
                     )
                 },
                 colors = NavigationBarItemDefaults.colors().copy(
-                    selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     selectedIndicatorColor = MaterialTheme.colorScheme.inverseOnSurface
                 ),
                 modifier = Modifier
@@ -169,7 +188,7 @@ fun CloudburstNavBar(
     }
 }
 
-@Preview
+@Preview (showBackground = true)
 @Composable
 fun PreviewNavBar() {
     CloudburstTheme {
@@ -181,3 +200,15 @@ fun PreviewNavBar() {
         )
     }
 }
+
+@Preview (showBackground = true)
+@Composable
+fun PreviewNavRail() {
+    CloudburstTheme {
+        CloudburstNavigationRail(
+            currentRoute = Screen.Home.route,
+            onTabPressed = {}
+        )
+    }
+}
+

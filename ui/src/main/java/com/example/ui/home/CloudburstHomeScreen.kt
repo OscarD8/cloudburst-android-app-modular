@@ -1,10 +1,15 @@
 package com.example.ui.home
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,6 +48,7 @@ import com.example.ui.R
 import com.example.ui.common.components.ExploreButton
 import com.example.ui.theme.CloudburstTheme
 import com.example.ui.theme.FullRoundedShape30
+import com.example.ui.theme.presetDropShadow
 import com.example.ui.theme.shadowCustom
 
 
@@ -71,11 +77,21 @@ fun CloudburstHomeScreen(
             )
         }
         WindowWidthSizeClass.Medium -> {
-
+            HomeScreenMedium(
+                onExploreClicked = { viewModel.onExploreClicked() },
+                modifier = modifier
+            )
         }
         WindowWidthSizeClass.Expanded -> {
+            HomeScreenExpanded(
+                onExploreClicked = { viewModel.onExploreClicked() },
+                modifier = modifier
+            )
         } else -> {
-
+            HomeScreenCompact(
+                onExploreClicked = { viewModel.onExploreClicked() },
+                modifier = modifier
+            )
         }
     }
 }
@@ -85,11 +101,8 @@ internal fun HomeScreenCompact(
     onExploreClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Decided not to hoist state because the screen contains minimal logic which is
-    // all self-contained here
     var isExpanded by remember { mutableStateOf(false) }
     val constraints = if (isExpanded) expandedConstraints else collapsedConstraints
-
 
     ConstraintLayout(
         constraintSet = constraints,
@@ -99,60 +112,146 @@ internal fun HomeScreenCompact(
         ),
         modifier = modifier
     ) {
-
-        Image(
-            painter = painterResource(R.drawable.home_cover_image),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        HomeImage(
             modifier = Modifier
                 .layoutId("image")
                 .clip(FullRoundedShape30)
                 .fillMaxWidth(0.7f)
         )
-
-        Surface(
-            shape = RoundedCornerShape(dimensionResource(R.dimen.home_surface_textbox_shape)),
-            color = MaterialTheme.colorScheme.inverseOnSurface,
+        HomeTextBox(
+            isExpanded = isExpanded,
+            onExpandClicked = { isExpanded = !isExpanded },
+            onExploreClicked = onExploreClicked,
             modifier = Modifier
                 .layoutId("textbox")
-                .padding(dimensionResource(R.dimen.home_surface_textbox_padding))
                 .fillMaxWidth(0.9f)
-                .shadowCustom(
-                    offsetY = dimensionResource(R.dimen.shadow_offset_y),
-                    blurRadius = dimensionResource(R.dimen.shadow_radius_standard),
-                    shapeRadius = dimensionResource(R.dimen.home_surface_textbox_shape),
-                )
-        ) {
-            Column (
-                modifier = Modifier.padding(dimensionResource(R.dimen.home_column_textbox_padding)),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.home_welcome),
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                AnimatedVisibility(visible = isExpanded) {
-                    Text(
-                        text = stringResource(R.string.home_city_description),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Justify,
-                        modifier = Modifier.padding(top = dimensionResource(R.dimen.home_text_textbox_padding)),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
+        )
+    }
+}
 
-                IconButton(onClick = {isExpanded = !isExpanded}) {
+@Composable
+internal fun HomeScreenMedium(
+    onExploreClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val constraints = if (isExpanded) expandedConstraints else collapsedConstraints
+
+    ConstraintLayout(
+        constraintSet = constraints,
+        animateChangesSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        ),
+        modifier = modifier
+    ) {
+        HomeImage(
+            modifier = Modifier
+                .layoutId("image")
+                .clip(FullRoundedShape30)
+                .fillMaxWidth(0.6f)
+        )
+        HomeTextBox(
+            isExpanded = isExpanded,
+            onExpandClicked = { isExpanded = !isExpanded },
+            onExploreClicked = onExploreClicked,
+            modifier = Modifier
+                .layoutId("textbox")
+                .fillMaxWidth(0.8f)
+        )
+    }
+}
+
+@Composable
+internal fun HomeScreenExpanded(
+    onExploreClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        HomeImage(
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .fillMaxWidth(0.5f)
+                .fillMaxHeight(0.9f)
+                .padding(start = dimensionResource(R.dimen.padding_xlarge))
+                .presetDropShadow(FullRoundedShape30)
+        )
+        HomeTextBox(
+            isExpanded = true,
+            onExpandClicked = { },
+            onExploreClicked = onExploreClicked,
+            isExpandable = false,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .fillMaxWidth(0.6f)
+                .padding(end = dimensionResource(R.dimen.padding_xlarge))
+        )
+    }
+}
+
+
+@Composable
+private fun HomeImage(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(R.drawable.home_cover_image),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+            .clip(FullRoundedShape30)
+    )
+}
+
+@Composable
+private fun HomeTextBox(
+    isExpanded: Boolean,
+    onExpandClicked: () -> Unit,
+    onExploreClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+    isExpandable: Boolean = true
+) {
+    Surface(
+        shape = RoundedCornerShape(dimensionResource(R.dimen.home_surface_textbox_shape)),
+        color = MaterialTheme.colorScheme.inverseOnSurface,
+        modifier = modifier
+            .padding(dimensionResource(R.dimen.home_surface_textbox_padding))
+            .shadowCustom(
+                offsetY = dimensionResource(R.dimen.shadow_offset_y),
+                blurRadius = dimensionResource(R.dimen.shadow_radius_standard),
+                shapeRadius = dimensionResource(R.dimen.home_surface_textbox_shape),
+            )
+    ) {
+        Column(
+            modifier = Modifier.padding(dimensionResource(R.dimen.home_column_textbox_padding)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.home_welcome),
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            AnimatedVisibility(visible = isExpanded) {
+                Text(
+                    text = stringResource(R.string.home_city_description),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier.padding(top = dimensionResource(R.dimen.home_text_textbox_padding)),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+            if (isExpandable) {
+                IconButton(onClick = onExpandClicked) {
                     Icon(
                         imageVector = if (!isExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
                         contentDescription = stringResource(R.string.expand_content_desc),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
-
-                ExploreButton(onClick = onExploreClicked)
-            }
+}
+            ExploreButton(onClick = onExploreClicked)
         }
     }
 }
@@ -215,20 +314,24 @@ private val expandedConstraints = ConstraintSet {
     }
 }
 
-@Composable
-internal fun HomeScreenMedium() {
 
-}
 
 @Composable
-internal fun HomeScreenExpanded() {
-
-}
-
-@Composable
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 fun PreviewHomeScreenCompactLight() {
     CloudburstTheme {
+        HomeScreenCompact(
+            modifier = Modifier.fillMaxSize(),
+            onExploreClicked = {
+            }
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PreviewHomeScreenCompactDark() {
+    CloudburstTheme(darkTheme = true) {
         HomeScreenCompact(
             modifier = Modifier.fillMaxSize(),
             onExploreClicked = {}
@@ -237,10 +340,21 @@ fun PreviewHomeScreenCompactLight() {
 }
 
 @Composable
-@Preview (showBackground = true)
-fun PreviewHomeScreenCompactDark() {
-    CloudburstTheme(darkTheme = true) {
-        HomeScreenCompact(
+@Preview(showBackground = true, widthDp = 800, heightDp = 1280)
+fun PreviewHomeScreenMedium() {
+    CloudburstTheme {
+        HomeScreenMedium(
+            modifier = Modifier.fillMaxSize(),
+            onExploreClicked = {}
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true, widthDp = 1280, heightDp = 800)
+fun PreviewHomeScreenExpanded() {
+    CloudburstTheme {
+        HomeScreenExpanded(
             modifier = Modifier.fillMaxSize(),
             onExploreClicked = {}
         )

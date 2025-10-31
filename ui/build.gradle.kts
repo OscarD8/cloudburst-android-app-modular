@@ -56,6 +56,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.foundation.layout)
     mockitoAgent(libs.mockito.core) { isTransitive = false }
 
     implementation(libs.androidx.core.ktx)

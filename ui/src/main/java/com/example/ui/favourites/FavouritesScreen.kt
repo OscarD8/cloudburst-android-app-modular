@@ -3,6 +3,8 @@ package com.example.ui.favourites
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,9 +35,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.domain.model.LocationCategory
 import com.example.ui.R
 import com.example.ui.common.backgroundCropPresets
+import com.example.ui.common.components.toggle
 import com.example.ui.locations.LocationUiModel
 import com.example.ui.locations.list.LocationListItem
-import com.example.ui.locations.list.toggle
 import com.example.ui.theme.CloudburstTheme
 import com.example.core.navigation.R as navR
 
@@ -76,10 +78,11 @@ fun FavouritesScreen(
         }
 
         else -> {
+            val favouritesMap = viewModel.categoriseFavourites()
             when (windowSize) {
                 WindowWidthSizeClass.Compact -> {
                     FavouritesScreenCompact(
-                        favouritesMap = viewModel.categoriseFavourites(),
+                        favouritesMap = favouritesMap,
                         expandedItemIds = expandedItemIds,
                         onExploreClicked = { onExploreClicked(it) },
                         onFavouriteClicked = { viewModel.toggleFavourite(it) },
@@ -89,15 +92,36 @@ fun FavouritesScreen(
                 }
 
                 WindowWidthSizeClass.Medium -> {
-
+                    FavouritesScreenMedium(
+                        favouritesMap = favouritesMap,
+                        expandedItemIds = expandedItemIds,
+                        onExploreClicked = { onExploreClicked(it) },
+                        onFavouriteClicked = { viewModel.toggleFavourite(it) },
+                        onClickToExpand = { expandedItemIds = expandedItemIds.toggle(it) },
+                        modifier = modifier
+                    )
                 }
 
                 WindowWidthSizeClass.Expanded -> {
-
+                    FavouritesScreenExpanded(
+                        favouritesMap = favouritesMap,
+                        expandedItemIds = expandedItemIds,
+                        onExploreClicked = { onExploreClicked(it) },
+                        onFavouriteClicked = { viewModel.toggleFavourite(it) },
+                        onClickToExpand = { expandedItemIds = expandedItemIds.toggle(it) },
+                        modifier = modifier
+                    )
                 }
 
                 else -> {
-
+                    FavouritesScreenCompact(
+                        favouritesMap = favouritesMap,
+                        expandedItemIds = expandedItemIds,
+                        onExploreClicked = { onExploreClicked(it) },
+                        onFavouriteClicked = { viewModel.toggleFavourite(it) },
+                        onClickToExpand = { expandedItemIds = expandedItemIds.toggle(it) },
+                        modifier = modifier
+                    )
                 }
             }
         }
@@ -144,6 +168,97 @@ private fun FavouritesScreenCompact(
         }
     }
 
+}
+
+@Composable
+private fun FavouritesScreenMedium(
+    favouritesMap: Map<LocationCategory, List<LocationUiModel>>,
+    expandedItemIds: Set<Long>,
+    onExploreClicked: (Long) -> Unit,
+    onFavouriteClicked: (Long) -> Unit,
+    onClickToExpand: (Long) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.verticalScroll(rememberScrollState())
+    ) {
+        var index = 0
+
+        for ((category, locations) in favouritesMap) {
+            CategoryHeader(
+                text = category.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = dimensionResource(R.dimen.padding_large))
+            )
+            locations.forEach { location ->
+                LocationListItem(
+                    location = location,
+                    isExpanded = location.id in expandedItemIds,
+                    onClickToExpand = { onClickToExpand(location.id) },
+                    onExploreClicked = { onExploreClicked(location.id) },
+                    onClickToFavourite = { onFavouriteClicked(location.id) },
+                    cropAlignment = backgroundCropPresets[index % backgroundCropPresets.size],
+                    modifier = Modifier
+                        .width(dimensionResource(R.dimen.list_item_width_medium))
+                        .height(dimensionResource(R.dimen.list_item_height_medium))
+                )
+                index++
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun FavouritesScreenExpanded(
+    favouritesMap: Map<LocationCategory, List<LocationUiModel>>,
+    expandedItemIds: Set<Long>,
+    onExploreClicked: (Long) -> Unit,
+    onFavouriteClicked: (Long) -> Unit,
+    onClickToExpand: (Long) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.verticalScroll(rememberScrollState())
+    ) {
+        var index = 0
+
+        for ((category, locations) in favouritesMap) {
+            CategoryHeader(
+                text = category.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = dimensionResource(R.dimen.padding_large))
+            )
+            // Use FlowRow to create a wrapping grid-like layout
+            FlowRow(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+            ) {
+                locations.forEach { location ->
+                    LocationListItem(
+                        location = location,
+                        isExpanded = location.id in expandedItemIds,
+                        onClickToExpand = { onClickToExpand(location.id) },
+                        onExploreClicked = { onExploreClicked(location.id) },
+                        onClickToFavourite = { onFavouriteClicked(location.id) },
+                        cropAlignment = backgroundCropPresets[index % backgroundCropPresets.size],
+                        modifier = Modifier
+                            // Use compact dimensions for grid items
+                            .width(dimensionResource(R.dimen.list_item_width))
+                            .height(dimensionResource(R.dimen.list_item_height))
+                    )
+                    index++
+                }
+            }
+        }
+    }
 }
 
 @Composable

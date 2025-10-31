@@ -3,6 +3,7 @@ package com.example.cloudburst.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -63,46 +64,46 @@ fun CloudburstNavigationBase(
                         drawerContainerColor = MaterialTheme.colorScheme.primaryContainer,
                         drawerShape = RightSideRoundedShape30,
                         modifier = Modifier
+                            .width(dimensionResource(R.dimen.drawer_width))
+                            .shadowCustom(
+                                offsetY = dimensionResource(R.dimen.shadow_offset_negative_y),
+                                blurRadius = dimensionResource(R.dimen.shadow_radius_standard),
+                                shapeRadius = dimensionResource(R.dimen.shadow_shape_radius)
+                            )
                     ) {
                         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.navdrawer_spacer_height)))
                         CloudburstNavigationDrawerContent(
                             currentRoute = currentRoute,
                             onTabPressed = onTabPressed,
-                            modifier = Modifier.padding(dimensionResource(R.dimen.navdrawer_item_horizontal_padding))
+                            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.navdrawer_item_horizontal_padding))
                         )
                     }
                 },
-                modifier = Modifier
-                    .width(dimensionResource(R.dimen.drawer_width))
-                    .shadowCustom(
-                        offsetY = dimensionResource(R.dimen.shadow_offset_negative_y),
-                        blurRadius = dimensionResource(R.dimen.shadow_radius_standard),
-                        shapeRadius = dimensionResource(R.dimen.shadow_shape_radius),
-                    )
+                modifier = Modifier.fillMaxSize()
             ) {
                 CloudburstNavHost(
                     setTopBarTitle = setTopBarTitle,
                     navController = navController,
                     windowSize = windowSize,
-                    modifier = modifier // ?
+                    modifier = modifier
                 )
             }
         }
         CloudburstNavigationType.NAVIGATION_RAIL -> {
-            Row(modifier = modifier) { // Medium device content wraps in a row the rail and the content.
+            Row(modifier = Modifier.fillMaxSize()) { // Medium device content wraps in a row the rail and the content.
                 CloudburstNavigationRail(
                     currentRoute = currentRoute,
                     onTabPressed = onTabPressed, // placeholder to pass route up to AppBase.
-                    modifier = Modifier  //TODO
+//                    modifier = Modifier.fillMaxHeight()
                 )
                 Column(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
                 ) {
                     CloudburstNavHost(
                         setTopBarTitle = setTopBarTitle,
                         navController = navController,
                         windowSize = windowSize,
-                        modifier = modifier // ?
+                        modifier = modifier
                     )
                 }
             }

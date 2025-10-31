@@ -81,7 +81,7 @@ fun CloudburstAppBase(
      * Bottom bar only on compact devices.
      */
     Scaffold(
-        topBar = {
+        topBar = { // defining to app bar here causes complications for shape layouts of different nav components...
             CloudburstTopAppBar(
                 screenTitle = topBarTitle,
                 canNavigateBack = navController.previousBackStackEntry != null,

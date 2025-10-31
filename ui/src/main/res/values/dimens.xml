@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="drawer_width">240dp</dimen>
+    <dimen name="drawer_width">200dp</dimen>
 
     <!-- Generic Dimens -->
     <dimen name="padding_small">4.dp</dimen>
@@ -53,6 +53,8 @@
     <dimen name="list_item_internal_textbox_width">203.dp</dimen>
     <dimen name="list_item_internal_textbox_height">86.dp</dimen>
     <dimen name="list_item_width">335.dp</dimen>
+    <dimen name="list_item_width_medium">450.dp</dimen>
+    <dimen name="list_item_height_medium">184.dp</dimen>
     <dimen name="list_item_height">163.dp</dimen>
     <dimen name="list_item_next_arrow_box">60.dp</dimen>
     <dimen name="list_item_expanded_width">263.dp</dimen>
@@ -62,6 +64,7 @@
     <dimen name="list_item_rating_icon_size">20.dp</dimen>
     <dimen name="list_item_expand_box_border">2.dp</dimen>
     <dimen name="list_item_carbon_item_size">24.dp</dimen>
+    <dimen name="list_item_height_medium_expanded">150.dp</dimen>
 
     <!-- Detail Screen Items -->
     <dimen name="detail_screen_card_width">389.dp</dimen>
