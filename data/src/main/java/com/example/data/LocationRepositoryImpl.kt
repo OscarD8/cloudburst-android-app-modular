@@ -50,6 +50,10 @@ class LocationRepositoryImpl @Inject constructor(
             }
     }
 
+    override suspend fun getRandomId(): Long {
+        return FakeApiService.getRandomId()
+    }
+
     override suspend fun getCategories(): List<LocationCategory> {
         return LocationCategory.entries
     }

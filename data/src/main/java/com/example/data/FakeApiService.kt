@@ -496,6 +496,11 @@ internal object FakeApiService {
         }
     }
 
+    /**
+     * Get a list of favourite locations.
+     *
+     * @return Flow of a list of favourite locations.
+     */
     fun getFavourites(): Flow<List<LocationDataEntry>> {
         return allLocations.map { allLocations ->
             allLocations.filter { locationDataEntry ->
@@ -530,5 +535,14 @@ internal object FakeApiService {
                 }
             }
         }
+    }
+
+    /**
+     * Get a random location ID.
+     *
+     * @return A random location ID.
+     */
+    fun getRandomId(): Long {
+        return _allLocations.value.map { it.id }.random()
     }
 }

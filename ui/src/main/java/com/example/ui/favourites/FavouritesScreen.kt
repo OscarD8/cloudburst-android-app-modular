@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.domain.model.LocationCategory
 import com.example.ui.R
+import com.example.ui.common.backgroundCropPresets
 import com.example.ui.locations.LocationUiModel
 import com.example.ui.locations.list.LocationListItem
 import com.example.ui.locations.list.toggle
@@ -117,6 +118,8 @@ private fun FavouritesScreenCompact(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
+        var index = 0
+
         for ((category, locations) in favouritesMap) {
             CategoryHeader(
                 text = category.name,
@@ -131,10 +134,12 @@ private fun FavouritesScreenCompact(
                     onClickToExpand = { onClickToExpand(location.id) },
                     onExploreClicked = { onExploreClicked(location.id) },
                     onClickToFavourite = { onFavouriteClicked(location.id) },
+                    cropAlignment = backgroundCropPresets[index % backgroundCropPresets.size],
                     modifier = Modifier
                         .width(dimensionResource(R.dimen.list_item_width))
                         .height(dimensionResource(R.dimen.list_item_height))
                 )
+                index++
             }
         }
     }

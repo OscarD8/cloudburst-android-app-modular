@@ -58,7 +58,10 @@ class LocationsListViewModel @Inject constructor(
     fun getCategoryImageRes(): Int {
         return when (locationCategory) {
             LocationCategory.RESTAURANTS -> R.drawable.rest_bg
-            else -> R.drawable.list_master_bg
+            LocationCategory.CAFES -> R.drawable.cafe_bg3
+            LocationCategory.PARKS -> R.drawable.park_bg3
+            LocationCategory.TEMPLES -> R.drawable.temple_bg2
+            LocationCategory.PRINTERS -> R.drawable.printer_bg1
         }
     }
 

@@ -173,10 +173,6 @@ private fun LocationsListScreenCompact(
 
             AnimatedVisibility(
                 visibleState = isVisible,
-                enter = fadeIn(
-                    animationSpec = spring(dampingRatio = DampingRatioLowBouncy)
-                ),
-                exit = fadeOut(),
                 modifier = modifier
             ) {
                 LocationListItem(

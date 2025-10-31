@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.layoutId
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.ui.R
 import com.example.ui.common.components.ExploreButton
 import com.example.ui.theme.CloudburstTheme
@@ -49,30 +50,39 @@ import com.example.ui.theme.shadowCustom
 fun CloudburstHomeScreen(
     setTopBarTitle: (String) -> Unit,
     windowSize: WindowWidthSizeClass,
-    modifier: Modifier = Modifier
+    onExploreClicked: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val homeTitle = stringResource(R.string.home)
+
     LaunchedEffect(Unit) {
         setTopBarTitle(homeTitle)
+        viewModel.eventFlow.collect { randomId ->
+            onExploreClicked(randomId)
+        }
     }
 
     when (windowSize) {
         WindowWidthSizeClass.Compact -> {
-            HomeScreenCompact(modifier = modifier)
+            HomeScreenCompact(
+                onExploreClicked = { viewModel.onExploreClicked() },
+                modifier = modifier
+            )
         }
         WindowWidthSizeClass.Medium -> {
-            HomeScreenMedium()
+
         }
         WindowWidthSizeClass.Expanded -> {
-            HomeScreenExpanded()
         } else -> {
-            HomeScreenCompact()
+
         }
     }
 }
 
 @Composable
 internal fun HomeScreenCompact(
+    onExploreClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Decided not to hoist state because the screen contains minimal logic which is
@@ -141,7 +151,7 @@ internal fun HomeScreenCompact(
                     )
                 }
 
-                ExploreButton(onClick = {})
+                ExploreButton(onClick = onExploreClicked)
             }
         }
     }
@@ -220,7 +230,8 @@ internal fun HomeScreenExpanded() {
 fun PreviewHomeScreenCompactLight() {
     CloudburstTheme {
         HomeScreenCompact(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            onExploreClicked = {}
         )
     }
 }
@@ -230,7 +241,8 @@ fun PreviewHomeScreenCompactLight() {
 fun PreviewHomeScreenCompactDark() {
     CloudburstTheme(darkTheme = true) {
         HomeScreenCompact(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            onExploreClicked = {}
         )
     }
 }

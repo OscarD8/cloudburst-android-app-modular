@@ -17,7 +17,10 @@ import com.example.ui.locations.detail.LocationDetailRoute
 import com.example.ui.locations.list.LocationsListScreen
 
 /**
- * Defines the routes for navigation.
+ * Navigation host for the app - sets up the navigation graph for the app.
+ *
+ * @param navController The navigation controller to use.
+ * @param windowSize The size of the device's window.
  */
 @Composable
 internal fun CloudburstNavHost(
@@ -35,6 +38,9 @@ internal fun CloudburstNavHost(
             CloudburstHomeScreen(
                 setTopBarTitle = setTopBarTitle,
                 windowSize,
+                onExploreClicked = { locationId ->
+                    navController.navigate(Screen.LocationDetail.createRoute(locationId))
+                },
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -50,18 +56,17 @@ internal fun CloudburstNavHost(
             )
         }
 
-        composable( Screen.Favourites.route ) {
+        composable(Screen.Favourites.route) {
             FavouritesScreen(
                 setTopBarTitle = setTopBarTitle,
                 windowSize = windowSize,
                 onExploreClicked = { locationId ->
                     navController.navigate(Screen.LocationDetail.createRoute(locationId))
-               },
+                },
                 modifier = Modifier.fillMaxSize()
             )
         }
 
-        // One composable handles all location list screens
         composable(
             route = Screen.LocationsList.route,
             arguments = listOf(
@@ -70,8 +75,6 @@ internal fun CloudburstNavHost(
                 }
             )
         ) {
-            // LocationsListScreen's viewmodel will use the "category" argument
-            // from the route to fetch the correct data
             LocationsListScreen(
                 setTopBarTitle = setTopBarTitle,
                 windowSize = windowSize,
